@@ -1,0 +1,65 @@
+// Tarea 1: Lógica de 'Like' y 'Save' (Server Actions - app/actions/social.ts)
+/*
+'use server';
+
+import { createClient } from '@/utils/supabase/server';
+import { revalidatePath } from 'next/cache';
+
+export async function toggleLikePlatillo(platilloId: string, userId: string) {
+  const supabase = createClient();
+  
+  const { data: existing } = await supabase
+    .from('likes')
+    .select('id')
+    .match({ platillo_id: platilloId, user_id: userId })
+    .single();
+
+  if (existing) {
+    await supabase.from('likes').delete().eq('id', existing.id);
+  } else {
+    await supabase.from('likes').insert({ platillo_id: platilloId, user_id: userId });
+  }
+
+  revalidatePath('/');
+  revalidatePath('/favoritos');
+}
+*/
+
+// Tarea 3: Página de Favoritos (app/favoritos/page.tsx)
+/*
+import { createClient } from '@/utils/supabase/server';
+import PlatilloCard from '@/components/PlatilloCard';
+import { redirect } from 'next/navigation';
+
+export default async function FavoritosPage() {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) redirect('/login');
+
+  const { data: favorites } = await supabase
+    .from('saves')
+    .select('*, platillos(*)')
+    .eq('user_id', user.id);
+
+  const platillos = favorites?.map(f => f.platillos) || [];
+
+  return (
+    <div className="max-w-6xl mx-auto p-8">
+      <h1 className="text-4xl font-serif mb-8 text-white">Mis Favoritos</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {platillos.map((platillo) => (
+          <PlatilloCard 
+            key={platillo.id}
+            platilloId={platillo.id}
+            nombre={platillo.nombre}
+            precio={platillo.precio}
+            imagenUrl={platillo.imagen_url}
+            isSavedByMe={true}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+*/
