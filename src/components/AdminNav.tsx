@@ -18,7 +18,7 @@ export default function AdminNav({ activeView, onViewChange, onLogout }: AdminNa
   return (
     <div className="fixed left-0 top-0 bottom-0 w-24 md:w-64 bg-white border-r border-slate-200 flex flex-col items-center py-10 z-[100]">
       <div className="mb-20 px-4 text-center">
-        <h2 className="hidden md:block font-serif italic text-primary text-2xl">Menulike Admin</h2>
+        <h2 className="hidden md:block font-serif italic text-primary text-2xl font-bold">Menulike Admin</h2>
         <div className="md:hidden w-10 h-10 bg-primary rounded-sm mx-auto" />
       </div>
 

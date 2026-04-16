@@ -63,7 +63,7 @@ export default function App() {
 
   if (activeTab === 'admin') {
     return (
-      <div className="min-h-screen bg-editorial-bg text-white font-sans selection:bg-gold/30 flex">
+      <div className="min-h-screen bg-page-bg text-ink font-sans selection:bg-primary/20 flex">
         <AdminNav 
           activeView={adminView} 
           onViewChange={setAdminView} 
@@ -75,19 +75,19 @@ export default function App() {
             <AdminDishForm />
           ) : adminView === 'metrics' ? (
             <div className="max-w-4xl mx-auto py-20 text-center">
-              <h1 className="font-serif text-5xl mb-8"> Culinary Analytics </h1>
-              <p className="text-white/40 italic">Las métricas de rendimiento estarán disponibles próximamente.</p>
+              <h1 className="font-serif text-ink text-5xl mb-8"> Culinary Analytics </h1>
+              <p className="text-slate-400 italic">Las métricas de rendimiento estarán disponibles próximamente.</p>
             </div>
           ) : (
             <div className="max-w-6xl mx-auto py-12">
               <header className="mb-12 flex items-center justify-between">
                 <div>
-                  <h1 className="font-serif text-5xl font-light">Inventory Edit</h1>
-                  <p className="text-gold/60 uppercase tracking-widest text-[9px] mt-2">Gestionar el catálogo gourmet</p>
+                  <h1 className="font-serif text-ink text-5xl font-bold">Inventory Edit</h1>
+                  <p className="text-primary uppercase tracking-widest text-[9px] mt-2 font-bold">Gestionar el catálogo gourmet</p>
                 </div>
                 <button 
                   onClick={() => setAdminView('new')}
-                  className="bg-gold px-8 py-3 text-black text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-all"
+                  className="bg-primary px-8 py-3 text-white text-[10px] font-bold uppercase tracking-widest hover:bg-ink transition-all rounded-full shadow-lg"
                 >
                   Agregar Nuevo
                 </button>
@@ -170,12 +170,12 @@ export default function App() {
           <div className="py-12 px-6">
             <div className="max-w-6xl mx-auto flex flex-col items-center mb-16 space-y-4">
               <span className="text-primary text-[10px] font-bold uppercase tracking-[0.4em]">Experiencia Gastronómica</span>
-              <h2 className="font-serif text-slate-400 text-xl font-light italic">Descubriendo los sabores más auténticos</h2>
+              <h2 className="font-serif text-slate-500 text-xl font-light italic">Descubriendo los sabores más auténticos</h2>
             </div>
 
             {loading ? (
               <div className="flex justify-center py-20">
-                <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
               </div>
             ) : (
               <div className="space-y-16">
@@ -188,7 +188,7 @@ export default function App() {
                     onShare={handleShare}
                   />
                 )) : (
-                  <div className="text-center py-20 text-white/20 font-serif italic text-xl">
+                  <div className="text-center py-20 text-slate-400 font-serif italic text-xl">
                     No se encontraron platillos en la base de datos.
                   </div>
                 )}
