@@ -1,6 +1,7 @@
 import React from 'react';
 import DishCard, { Dish } from './components/DishCard';
-import { recordInteraction } from './lib/supabase';
+import { recordInteraction, isSupabaseConfigured } from './lib/supabase';
+import { AlertCircle } from 'lucide-react';
 
 const SAMPLE_DISHES: Dish[] = [
   {
@@ -52,6 +53,16 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-editorial-bg text-white font-sans selection:bg-gold/30">
+      {/* Config Warning for Vercel */}
+      {!isSupabaseConfigured && (
+        <div className="bg-red-500/20 border-b border-red-500/50 p-4 flex items-center justify-center space-x-3 backdrop-blur-sm sticky top-0 z-[100]">
+          <AlertCircle className="text-red-500 w-5 h-5 flex-shrink-0" />
+          <p className="text-sm font-medium text-red-200">
+            Faltan variables de entorno: <code className="bg-black/30 px-1 rounded mx-1 text-red-100">VITE_SUPABASE_URL</code> y <code className="bg-black/30 px-1 rounded mx-1 text-red-100">VITE_SUPABASE_ANON_KEY</code>. Configúralas en Vercel para activar la base de datos.
+          </p>
+        </div>
+      )}
+
       {/* Header Ficticio - Vogue Style */}
       <header className="sticky top-0 z-50 bg-editorial-bg/80 backdrop-blur-md border-b border-white/10 px-8 py-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between">

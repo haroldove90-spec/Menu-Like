@@ -3,7 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = (import.meta as any).env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = (import.meta as any).env.VITE_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+export const supabase = isSupabaseConfigured 
+  ? createClient(supabaseUrl, supabaseAnonKey) 
+  : null as any;
 
 /**
  * Tarea 1: Esquema de Base de Datos (SQL para Supabase)
@@ -50,6 +53,11 @@ const getSessionId = (): string => {
  * Tarea 3: Función para registrar un "Like" (u otra interacción) asegurando no duplicidad
  */
 export async function recordInteraction(platilloId: string, tipo: 'like' | 'save' | 'share') {
+  if (!isSupabaseConfigured) {
+    console.warn('Supabase is not configured. Interaction not recorded.');
+    return { status: 'mocked' };
+  }
+  
   const sessionId = getSessionId();
 
   try {
