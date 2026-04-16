@@ -5,7 +5,9 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", serif;
 
+  --color-primary: #E63946;
+  --color-surface: #FFFFFF;
+  --color-page-bg: #F8FAFC;
+  --color-ink: #0F172A;
   --color-gold: #D4AF37;
-  --color-surface: #1A1A1A;
-  --color-editorial-bg: #0F0F0F;
 }

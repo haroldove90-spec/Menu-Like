@@ -115,45 +115,50 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-editorial-bg text-white font-sans selection:bg-gold/30">
+    <div className="min-h-screen bg-page-bg text-ink font-sans selection:bg-primary/20">
       {/* Config Warning */}
       {!isSupabaseConfigured && (
-        <div className="bg-red-500/20 border-b border-red-500/50 p-4 flex items-center justify-center space-x-3 backdrop-blur-sm sticky top-0 z-[100]">
+        <div className="bg-red-50 border-b border-red-200 p-4 flex items-center justify-center space-x-3 sticky top-0 z-[100]">
           <AlertCircle className="text-red-500 w-5 h-5 flex-shrink-0" />
-          <p className="text-sm font-medium text-red-200">
-            Faltan variables de entorno para Supabase. Usando modo demostración.
+          <p className="text-sm font-medium text-red-800">
+            Modo demostración: Faltan variables de entorno para Supabase.
           </p>
         </div>
       )}
 
-      {/* Header - Editorial Style */}
-      <header className="sticky top-0 z-50 bg-editorial-bg/80 backdrop-blur-md border-b border-white/10 px-8 py-6">
+      {/* Header - Menulike Branding */}
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 px-8 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <h1 
+          <div 
             onClick={() => setActiveTab('feed')}
-            className="font-serif italic text-2xl tracking-[0.2em] uppercase text-white cursor-pointer"
+            className="cursor-pointer transition-transform hover:scale-105"
           >
-            Vogue Gusto
-          </h1>
+            <img 
+              src="https://appdesignproyectos.com/menulike.png" 
+              alt="Menulike Logo" 
+              className="h-10 md:h-12 w-auto object-contain"
+              referrerPolicy="no-referrer"
+            />
+          </div>
           <nav>
-            <ul className="flex space-x-8 text-[11px] font-bold uppercase tracking-[0.3em] text-white/40">
+            <ul className="flex space-x-8 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
               <li 
                 onClick={() => setActiveTab('feed')}
-                className={`transition-colors cursor-pointer hover:text-gold ${activeTab === 'feed' ? 'text-gold' : ''}`}
+                className={`transition-colors cursor-pointer hover:text-primary ${activeTab === 'feed' ? 'text-primary' : ''}`}
               >
-                Explorar
+                Menú
               </li>
               <li 
                 onClick={() => setActiveTab('favorites')}
-                className={`transition-colors cursor-pointer hover:text-gold ${activeTab === 'favorites' ? 'text-gold' : ''}`}
+                className={`transition-colors cursor-pointer hover:text-primary ${activeTab === 'favorites' ? 'text-primary' : ''}`}
               >
                 Favoritos
               </li>
               <li 
                 onClick={() => setActiveTab('admin')}
-                className={`transition-colors cursor-pointer hover:text-red-400 font-black ${activeTab === 'admin' ? 'text-red-400' : ''}`}
+                className={`transition-colors cursor-pointer hover:text-primary ${activeTab === 'admin' ? 'text-primary' : ''}`}
               >
-                Admin
+                Panel
               </li>
             </ul>
           </nav>
@@ -164,8 +169,8 @@ export default function App() {
         {activeTab === 'feed' ? (
           <div className="py-12 px-6">
             <div className="max-w-6xl mx-auto flex flex-col items-center mb-16 space-y-4">
-              <span className="text-gold text-[10px] font-bold uppercase tracking-[0.5em]">The Spring Edit</span>
-              <h2 className="font-serif text-white/50 text-xl font-light italic">Curating the city's most refined culinary experiences</h2>
+              <span className="text-primary text-[10px] font-bold uppercase tracking-[0.4em]">Experiencia Gastronómica</span>
+              <h2 className="font-serif text-slate-400 text-xl font-light italic">Descubriendo los sabores más auténticos</h2>
             </div>
 
             {loading ? (
@@ -196,18 +201,18 @@ export default function App() {
       </main>
 
       {/* Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 h-20 bg-editorial-bg/95 backdrop-blur-lg border-t border-white/5 flex items-center justify-around z-50">
+      <nav className="fixed bottom-0 left-0 right-0 h-20 bg-white/95 backdrop-blur-xl border-t border-slate-200 flex items-center justify-around z-50">
         <button 
           onClick={() => setActiveTab('feed')}
-          className={`flex flex-col items-center space-y-1 transition-all ${activeTab === 'feed' ? 'text-gold' : 'text-white/40'}`}
+          className={`flex flex-col items-center space-y-1 transition-all ${activeTab === 'feed' ? 'text-primary' : 'text-slate-400'}`}
         >
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Discover</span>
+          <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Cerca de ti</span>
         </button>
         <button 
           onClick={() => setActiveTab('favorites')}
-          className={`flex flex-col items-center space-y-1 transition-all ${activeTab === 'favorites' ? 'text-gold' : 'text-white/40'}`}
+          className={`flex flex-col items-center space-y-1 transition-all ${activeTab === 'favorites' ? 'text-primary' : 'text-slate-400'}`}
         >
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Curated</span>
+          <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Guardados</span>
         </button>
       </nav>
     </div>

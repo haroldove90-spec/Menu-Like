@@ -83,20 +83,20 @@ export default function AdminDishForm() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">
       <header className="mb-12">
-        <h1 className="font-serif text-5xl font-light text-white mb-4">Nueva Creación</h1>
-        <p className="text-gold/60 uppercase tracking-[0.3em] text-[10px] font-bold">Publicar platillo en el menú digital</p>
+        <h1 className="font-serif text-5xl font-bold text-ink mb-4">Nueva Creación</h1>
+        <p className="text-primary/60 uppercase tracking-[0.3em] text-[10px] font-bold">Publicar platillo en el menú digital</p>
       </header>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-surface p-12 border border-white/5 shadow-2xl relative overflow-hidden">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-12 border border-slate-200 shadow-xl relative overflow-hidden rounded-3xl">
         {/* Background Accent */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 blur-[100px] -mr-16 -mt-16" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-[100px] -mr-16 -mt-16" />
 
         <div className="space-y-8">
           <div className="space-y-2">
-            <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Nombre del Platillo</label>
+            <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Nombre del Platillo</label>
             <input 
               required
-              className="w-full bg-editorial-bg border-b border-white/10 py-3 text-white focus:border-gold outline-none transition-colors"
+              className="w-full bg-slate-50 border-b border-slate-200 py-3 text-ink focus:border-primary outline-none transition-colors"
               placeholder="Ej: Carpaccio de Wagyu"
               value={formData.nombre}
               onChange={e => setFormData({...formData, nombre: e.target.value})}
@@ -104,11 +104,11 @@ export default function AdminDishForm() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Descripción Gourmet</label>
+            <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Descripción Gourmet</label>
             <textarea 
               required
               rows={3}
-              className="w-full bg-editorial-bg border-b border-white/10 py-3 text-white focus:border-gold outline-none transition-colors resize-none italic font-serif"
+              className="w-full bg-slate-50 border-b border-slate-200 py-3 text-ink focus:border-primary outline-none transition-colors resize-none italic font-serif"
               placeholder="Describe los matices y texturas..."
               value={formData.descripcion}
               onChange={e => setFormData({...formData, descripcion: e.target.value})}
@@ -117,21 +117,21 @@ export default function AdminDishForm() {
 
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Precio ($)</label>
+              <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Precio ($)</label>
               <input 
                 required
                 type="number"
                 step="0.01"
-                className="w-full bg-editorial-bg border-b border-white/10 py-3 text-white focus:border-gold outline-none transition-colors font-mono"
+                className="w-full bg-slate-50 border-b border-slate-200 py-3 text-ink focus:border-primary outline-none transition-colors font-mono"
                 placeholder="0.00"
                 value={formData.precio}
                 onChange={e => setFormData({...formData, precio: e.target.value})}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Categoría</label>
+              <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Categoría</label>
               <select 
-                className="w-full bg-editorial-bg border-b border-white/10 py-3 text-white focus:border-gold outline-none transition-colors appearance-none"
+                className="w-full bg-slate-50 border-b border-slate-200 py-3 text-ink focus:border-primary outline-none transition-colors appearance-none"
                 value={formData.categoria}
                 onChange={e => setFormData({...formData, categoria: e.target.value})}
               >
@@ -146,10 +146,10 @@ export default function AdminDishForm() {
 
         <div className="space-y-8 flex flex-col">
           <div className="space-y-2 flex-grow">
-            <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Visual del Platillo</label>
+            <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Visual del Platillo</label>
             <div 
               onClick={() => fileInputRef.current?.click()}
-              className="relative aspect-[4/5] bg-editorial-bg border border-dashed border-white/20 flex flex-col items-center justify-center cursor-pointer group hover:border-gold/50 transition-all overflow-hidden"
+              className="relative aspect-[4/5] bg-slate-50 border border-dashed border-slate-200 flex flex-col items-center justify-center cursor-pointer group hover:border-primary/50 transition-all overflow-hidden rounded-2xl"
             >
               <AnimatePresence>
                 {preview ? (
@@ -161,10 +161,10 @@ export default function AdminDishForm() {
                   />
                 ) : (
                   <div className="flex flex-col items-center space-y-4">
-                    <div className="w-12 h-12 rounded-full bg-black/40 flex items-center justify-center text-white/40 group-hover:text-gold transition-colors">
+                    <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-slate-300 group-hover:text-primary transition-colors">
                       <Upload className="w-5 h-5" />
                     </div>
-                    <span className="text-[9px] uppercase tracking-widest text-white/30 font-bold">Hacer click para subir</span>
+                    <span className="text-[9px] uppercase tracking-widest text-slate-300 font-bold">Hacer click para subir</span>
                   </div>
                 )}
               </AnimatePresence>
@@ -181,7 +181,7 @@ export default function AdminDishForm() {
           <button 
             type="submit"
             disabled={loading}
-            className="w-full bg-gold py-5 text-black font-bold uppercase tracking-[0.4em] text-[11px] hover:bg-white transition-all flex items-center justify-center space-x-3 disabled:bg-gold/50 disabled:cursor-not-allowed"
+            className="w-full bg-primary py-5 text-white font-bold uppercase tracking-[0.4em] text-[11px] hover:bg-ink transition-all flex items-center justify-center space-x-3 disabled:bg-primary/50 disabled:cursor-not-allowed rounded-xl"
           >
             {loading ? (
               <>
