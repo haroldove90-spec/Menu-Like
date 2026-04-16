@@ -1,5 +1,5 @@
 import React, { useOptimistic, useTransition } from 'react';
-import { Heart, Bookmark, Share2, MoreHorizontal } from 'lucide-react';
+import { Heart, Bookmark, Share2, MoreHorizontal, Edit3, EyeOff } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export interface Dish {
@@ -19,10 +19,21 @@ export interface DishCardProps {
   onLike: (dishId: string) => Promise<void>;
   onSave: (dishId: string) => Promise<void>;
   onShare: (dishId: string) => void;
+  isAdmin?: boolean;
+  onEdit?: (dishId: string) => void;
+  onToggleVisibility?: (dishId: string) => void;
   key?: string;
 }
 
-export default function DishCard({ dish, onLike, onSave, onShare }: DishCardProps) {
+export default function DishCard({ 
+  dish, 
+  onLike, 
+  onSave, 
+  onShare, 
+  isAdmin = false,
+  onEdit,
+  onToggleVisibility
+}: DishCardProps) {
   const [isPending, startTransition] = useTransition();
   
   // Optimistic state for Like
@@ -71,6 +82,24 @@ export default function DishCard({ dish, onLike, onSave, onShare }: DishCardProp
         />
         
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
+
+        {/* Admin Shortcuts */}
+        {isAdmin && (
+          <div className="absolute top-8 right-8 flex space-x-3 z-10">
+            <button 
+              onClick={() => onEdit?.(dish.id)}
+              className="p-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full text-white hover:bg-gold hover:text-black transition-all"
+            >
+              <Edit3 className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={() => onToggleVisibility?.(dish.id)}
+              className="p-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full text-white hover:bg-red-500 hover:text-white transition-all"
+            >
+              <EyeOff className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
         {/* Floating Price Badge */}
         <div className="absolute top-8 left-8 bg-black/60 backdrop-blur-2xl px-5 py-2.5 rounded-full border border-white/10 shadow-2xl">

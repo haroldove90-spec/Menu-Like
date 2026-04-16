@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import DishCard, { Dish } from './components/DishCard';
 import FavoritesView from './components/FavoritesView';
+import AdminDishForm from './components/AdminDishForm';
+import AdminNav from './components/AdminNav';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 import { toggleLikePlatillo, toggleSavePlatillo } from './lib/social';
 import { AlertCircle, Menu as MenuIcon, X } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'feed' | 'favorites'>('feed');
+  const [activeTab, setActiveTab] = useState<'feed' | 'favorites' | 'admin'>('feed');
+  const [adminView, setAdminView] = useState('dashboard');
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,9 +28,6 @@ export default function App() {
         .select('*');
       
       if (error) throw error;
-
-      // In a real app, we would join with interactions for the 'Me' status.
-      // For now we map the basic data.
       setDishes(data || []);
     } catch (err) {
       console.error(err);
@@ -47,6 +47,72 @@ export default function App() {
   const handleShare = (id: string) => {
     alert(`Compartiendo platillo ${id}`);
   };
+
+  const handleEdit = (id: string) => {
+    alert(`Modo Edición para platillo: ${id}`);
+    setAdminView('new'); // Abrir el formulario (simulado)
+  };
+
+  const handleToggleVisibility = (id: string) => {
+    alert(`Cambiando visibilidad de platillo: ${id}`);
+  };
+
+  const handleLogout = () => {
+    setActiveTab('feed');
+  };
+
+  if (activeTab === 'admin') {
+    return (
+      <div className="min-h-screen bg-editorial-bg text-white font-sans selection:bg-gold/30 flex">
+        <AdminNav 
+          activeView={adminView} 
+          onViewChange={setAdminView} 
+          onLogout={handleLogout} 
+        />
+        
+        <main className="flex-grow ml-24 md:ml-64 py-12 px-8 min-h-screen">
+          {adminView === 'new' ? (
+            <AdminDishForm />
+          ) : adminView === 'metrics' ? (
+            <div className="max-w-4xl mx-auto py-20 text-center">
+              <h1 className="font-serif text-5xl mb-8"> Culinary Analytics </h1>
+              <p className="text-white/40 italic">Las métricas de rendimiento estarán disponibles próximamente.</p>
+            </div>
+          ) : (
+            <div className="max-w-6xl mx-auto py-12">
+              <header className="mb-12 flex items-center justify-between">
+                <div>
+                  <h1 className="font-serif text-5xl font-light">Inventory Edit</h1>
+                  <p className="text-gold/60 uppercase tracking-widest text-[9px] mt-2">Gestionar el catálogo gourmet</p>
+                </div>
+                <button 
+                  onClick={() => setAdminView('new')}
+                  className="bg-gold px-8 py-3 text-black text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-all"
+                >
+                  Agregar Nuevo
+                </button>
+              </header>
+
+              <div className="grid grid-cols-1 gap-16">
+                {dishes.map((dish) => (
+                  <DishCard 
+                    key={dish.id} 
+                    dish={dish} 
+                    isAdmin={true}
+                    onLike={async () => {}}
+                    onSave={async () => {}}
+                    onShare={() => {}}
+                    onEdit={handleEdit}
+                    onToggleVisibility={handleToggleVisibility}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-editorial-bg text-white font-sans selection:bg-gold/30">
@@ -82,6 +148,12 @@ export default function App() {
                 className={`transition-colors cursor-pointer hover:text-gold ${activeTab === 'favorites' ? 'text-gold' : ''}`}
               >
                 Favoritos
+              </li>
+              <li 
+                onClick={() => setActiveTab('admin')}
+                className={`transition-colors cursor-pointer hover:text-red-400 font-black ${activeTab === 'admin' ? 'text-red-400' : ''}`}
+              >
+                Admin
               </li>
             </ul>
           </nav>
