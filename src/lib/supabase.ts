@@ -24,6 +24,13 @@ export const supabase = isSupabaseConfigured
  *   created_at TIMESTAMPTZ DEFAULT now()
  * );
  * 
+ * -- Tabla de Categorías
+ * CREATE TABLE categorias (
+ *   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+ *   nombre TEXT UNIQUE NOT NULL,
+ *   created_at TIMESTAMPTZ DEFAULT now()
+ * );
+ * 
  * -- Tabla de Interacciones
  * CREATE TABLE interacciones (
  *   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,

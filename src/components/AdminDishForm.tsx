@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { Upload, Plus, X, Loader2, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -13,6 +13,7 @@ interface AdminDishFormProps {
 export default function AdminDishForm({ dishToEdit, onSuccess, onCancel }: AdminDishFormProps) {
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<string | null>(dishToEdit?.imagen_url || null);
+  const [categories, setCategories] = useState<{id: string, nombre: string}[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
@@ -21,6 +22,29 @@ export default function AdminDishForm({ dishToEdit, onSuccess, onCancel }: Admin
     precio: dishToEdit?.precio.toString() || '',
     categoria: dishToEdit?.categoria || 'Entradas'
   });
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  async function fetchCategories() {
+    try {
+      const { data, error } = await supabase
+        .from('categorias')
+        .select('*')
+        .order('created_at', { ascending: true });
+      
+      if (data && data.length > 0) {
+        setCategories(data);
+        // Si estamos creando uno nuevo y hay categorías, poner la primera por defecto
+        if (!dishToEdit) {
+          setFormData(prev => ({ ...prev, categoria: data[0].nombre }));
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+    }
+  }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -178,10 +202,18 @@ export default function AdminDishForm({ dishToEdit, onSuccess, onCancel }: Admin
                 value={formData.categoria}
                 onChange={e => setFormData({...formData, categoria: e.target.value})}
               >
-                <option>Entradas</option>
-                <option>Fuertes</option>
-                <option>Postres</option>
-                <option>Mixología</option>
+                {categories.length > 0 ? (
+                  categories.map(cat => (
+                    <option key={cat.id} value={cat.nombre}>{cat.nombre}</option>
+                  ))
+                ) : (
+                  <>
+                    <option>Entradas</option>
+                    <option>Fuertes</option>
+                    <option>Postres</option>
+                    <option>Mixología</option>
+                  </>
+                )}
               </select>
             </div>
           </div>

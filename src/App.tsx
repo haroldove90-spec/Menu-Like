@@ -16,6 +16,8 @@ export default function App() {
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [loading, setLoading] = useState(true);
   const [restaurant, setRestaurant] = useState<any>(null);
+  const [categories, setCategories] = useState<{id: string, nombre: string}[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('todos');
 
   useEffect(() => {
     // Asegurar que exista una sesión para interacciones sociales desde el inicio
@@ -23,6 +25,7 @@ export default function App() {
       localStorage.setItem('social_menu_session', crypto.randomUUID());
     }
     fetchRestaurant();
+    fetchCategories();
     if (isSupabaseConfigured) {
       loadDishes();
     } else {
@@ -33,7 +36,16 @@ export default function App() {
   async function fetchRestaurant() {
     try {
       const { data } = await supabase.from('restaurantes').select('*').eq('id', 'rest-1').single();
-      setRestaurant(data);
+      if (data) setRestaurant(data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function fetchCategories() {
+    try {
+      const { data } = await supabase.from('categorias').select('*').order('created_at', { ascending: true });
+      if (data) setCategories(data);
     } catch (err) {
       console.error(err);
     }
@@ -307,18 +319,45 @@ export default function App() {
       <main className="pb-32">
         {activeTab === 'feed' ? (
           <div className="py-12 px-6">
-            <div className="max-w-6xl mx-auto flex flex-col items-center mb-16 px-4">
+            <div className="max-w-6xl mx-auto flex flex-col items-center mb-12 px-4">
               {restaurant?.logo_url ? (
                 <img 
                   src={restaurant.logo_url} 
                   alt={restaurant.nombre} 
-                  className="h-24 md:h-40 object-contain"
+                  className="h-24 md:h-40 object-contain mb-8"
                 />
               ) : (
-                <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center">
+                <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-8">
                   <span className="text-slate-300 font-serif italic">Logo</span>
                 </div>
               )}
+
+              {/* Categorías Filter */}
+              <div className="flex items-center space-x-3 overflow-x-auto pb-4 w-full justify-start md:justify-center no-scrollbar">
+                <button
+                  onClick={() => setSelectedCategory('todos')}
+                  className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] whitespace-nowrap transition-all border ${
+                    selectedCategory === 'todos' 
+                      ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-105' 
+                      : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'
+                  }`}
+                >
+                  Todos
+                </button>
+                {categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.nombre)}
+                    className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] whitespace-nowrap transition-all border ${
+                      selectedCategory === cat.nombre 
+                        ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-105' 
+                        : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'
+                    }`}
+                  >
+                    {cat.nombre}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {loading ? (
@@ -327,24 +366,27 @@ export default function App() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-[1200px] mx-auto px-4">
-                {dishes.length > 0 ? dishes.map((dish) => (
-                  <DishCard 
-                    key={dish.id} 
-                    dish={dish} 
-                    onLike={handleLike}
-                    onSave={handleSave}
-                    onShare={handleShare}
-                  />
-                )) : (
+                {dishes.filter(d => selectedCategory === 'todos' || d.categoria === selectedCategory).length > 0 ? 
+                  dishes
+                    .filter(d => selectedCategory === 'todos' || d.categoria === selectedCategory)
+                    .map((dish) => (
+                      <DishCard 
+                        key={dish.id} 
+                        dish={dish} 
+                        onLike={handleLike}
+                        onSave={handleSave}
+                        onShare={handleShare}
+                      />
+                    )) : (
                   <div className="text-center py-20 px-6 bg-white rounded-[2rem] border border-dashed border-slate-200 w-full col-span-full">
                     <p className="text-slate-400 font-serif italic text-xl mb-6">
-                      No se encontraron platillos disponibles.
+                      No se encontraron platillos en esta categoría.
                     </p>
                     <button 
-                      onClick={() => loadDishes()}
+                      onClick={() => setSelectedCategory('todos')}
                       className="px-8 py-3 bg-slate-900 text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all"
                     >
-                      Intentar Recargar
+                      Ver todos los platillos
                     </button>
                   </div>
                 )}
