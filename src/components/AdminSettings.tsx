@@ -8,6 +8,7 @@ export default function AdminSettings() {
   const [saving, setSaving] = useState(false);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [restName, setRestName] = useState('Menú Like');
+  const [navBgColor, setNavBgColor] = useState('#0F172A'); // Default dark
   const [categories, setCategories] = useState<{id: string, nombre: string}[]>([]);
   const [newCategory, setNewCategory] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -29,6 +30,7 @@ export default function AdminSettings() {
       if (data) {
         setLogoUrl(data.logo_url);
         setRestName(data.nombre);
+        if (data.nav_bg_color) setNavBgColor(data.nav_bg_color);
       }
     } catch (err) {
       console.error('Error fetching settings:', err);
@@ -120,7 +122,8 @@ export default function AdminSettings() {
         .upsert({
           id: 'rest-1',
           nombre: restName,
-          logo_url: logoUrl
+          logo_url: logoUrl,
+          nav_bg_color: navBgColor
         });
 
       if (error) throw error;
@@ -197,6 +200,32 @@ export default function AdminSettings() {
               onChange={(e) => setRestName(e.target.value)}
               placeholder="Nombre de tu restaurante"
             />
+          </div>
+
+          {/* Color Section */}
+          <div className="space-y-6 pt-4">
+            <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Color del Menú (Fondo)</label>
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <input 
+                type="color"
+                className="w-20 h-20 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-sm"
+                value={navBgColor}
+                onChange={(e) => setNavBgColor(e.target.value)}
+              />
+              <div className="flex-grow space-y-2">
+                <p className="text-sm text-slate-500 italic font-serif">Ajusta el color de fondo para la barra de navegación lateral e inferior.</p>
+                <div className="flex gap-2">
+                  {['#0F172A', '#E63946', '#1E293B', '#10B981', '#3B82F6', '#8B5CF6'].map(color => (
+                    <button 
+                      key={color}
+                      onClick={() => setNavBgColor(color)}
+                      className="w-6 h-6 rounded-full border border-slate-200"
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
           <button 

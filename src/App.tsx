@@ -9,7 +9,8 @@ import AdminNav from './components/AdminNav';
 import AdminAuth from './components/AdminAuth';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 import { toggleLikePlatillo, toggleSavePlatillo } from './lib/social';
-import { AlertCircle, Menu as MenuIcon, X } from 'lucide-react';
+import { AlertCircle, Menu as MenuIcon, X, Home, Star } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'feed' | 'favorites' | 'admin'>('feed');
@@ -56,7 +57,13 @@ export default function App() {
   async function fetchRestaurant() {
     try {
       const { data } = await supabase.from('restaurantes').select('*').eq('id', 'rest-1').single();
-      if (data) setRestaurant(data);
+      if (data) {
+        setRestaurant(data);
+        // Persistir color en el root para acceso fácil por CSS o props
+        if (data.nav_bg_color) {
+          document.documentElement.style.setProperty('--nav-bg-custom', data.nav_bg_color);
+        }
+      }
     } catch (err) {
       console.error(err);
     }
@@ -244,6 +251,7 @@ export default function App() {
           activeView={adminView} 
           onViewChange={setAdminView} 
           onLogout={handleLogout} 
+          customBgColor={restaurant?.nav_bg_color}
         />
         
         <main className="flex-grow md:ml-64 pb-32 md:pb-12 pt-8 md:pt-12 px-2 md:px-8 min-h-screen w-full overflow-x-hidden">
@@ -456,18 +464,42 @@ export default function App() {
       </main>
 
       {/* Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 h-20 bg-white/95 backdrop-blur-xl border-t border-slate-200 flex items-center justify-around z-50">
+      <nav 
+        className="fixed bottom-0 left-0 right-0 h-20 bg-ink border-t border-white/5 flex items-center justify-around z-50 px-6 pb-2 shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.3)] transition-colors duration-500"
+        style={restaurant?.nav_bg_color ? { backgroundColor: restaurant.nav_bg_color } : {}}
+      >
         <button 
           onClick={() => setActiveTab('feed')}
-          className={`flex flex-col items-center space-y-1 transition-all ${activeTab === 'feed' ? 'text-primary' : 'text-slate-400'}`}
+          className="relative flex flex-col items-center justify-center h-full w-24 group"
         >
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Cerca de ti</span>
+          {activeTab === 'feed' && (
+            <motion.div 
+              layoutId="bubble"
+              className="absolute inset-x-0 inset-y-2 bg-white/10 rounded-2xl -z-10"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+            />
+          )}
+          <Home className={`w-5 h-5 mb-1 transition-all duration-300 ${activeTab === 'feed' ? 'text-primary scale-110' : 'text-slate-500 group-hover:text-slate-300'}`} />
+          <span className={`text-[8px] font-bold uppercase tracking-[0.2em] transition-colors duration-300 ${activeTab === 'feed' ? 'text-white' : 'text-slate-500 group-hover:text-slate-300'}`}>
+            Cerca de ti
+          </span>
         </button>
+
         <button 
           onClick={() => setActiveTab('favorites')}
-          className={`flex flex-col items-center space-y-1 transition-all ${activeTab === 'favorites' ? 'text-primary' : 'text-slate-400'}`}
+          className="relative flex flex-col items-center justify-center h-full w-24 group"
         >
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Mi Menú</span>
+          {activeTab === 'favorites' && (
+            <motion.div 
+              layoutId="bubble"
+              className="absolute inset-x-0 inset-y-2 bg-white/10 rounded-2xl -z-10"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+            />
+          )}
+          <Star className={`w-5 h-5 mb-1 transition-all duration-300 ${activeTab === 'favorites' ? 'text-primary scale-110' : 'text-slate-500 group-hover:text-slate-300'}`} />
+          <span className={`text-[8px] font-bold uppercase tracking-[0.2em] transition-colors duration-300 ${activeTab === 'favorites' ? 'text-white' : 'text-slate-500 group-hover:text-slate-300'}`}>
+            Mi Menú
+          </span>
         </button>
       </nav>
     </div>
