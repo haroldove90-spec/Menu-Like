@@ -47,7 +47,7 @@ export default function FavoritesView() {
 
       <AnimatePresence mode="popLayout">
         {favorites.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-8 max-w-[1400px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-[1200px] mx-auto px-4">
             {favorites.map((dish) => (
               <DishCard
                 key={dish.id}

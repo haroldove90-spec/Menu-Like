@@ -322,7 +322,7 @@ export default function App() {
                 <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-8 max-w-[1400px] mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-[1200px] mx-auto px-4">
                 {dishes.length > 0 ? dishes.map((dish) => (
                   <DishCard 
                     key={dish.id} 
