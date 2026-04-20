@@ -9,16 +9,16 @@ interface AdminNavProps {
 
 export default function AdminNav({ activeView, onViewChange, onLogout }: AdminNavProps) {
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'dashboard', label: 'Inicio', icon: LayoutDashboard },
     { id: 'new', label: 'Nuevo Platillo', icon: PlusCircle },
-    { id: 'metrics', label: 'Métricas', icon: BarChart3 },
+    { id: 'metrics', label: 'Estadísticas', icon: BarChart3 },
     { id: 'settings', label: 'Ajustes', icon: Settings },
   ];
 
   return (
     <div className="fixed left-0 top-0 bottom-0 w-24 md:w-64 bg-white border-r border-slate-200 flex flex-col items-center py-10 z-[100]">
       <div className="mb-20 px-4 text-center">
-        <h2 className="hidden md:block font-serif italic text-primary text-2xl font-bold">Menulike Admin</h2>
+        <h2 className="hidden md:block font-serif italic text-primary text-2xl font-bold">Menú Like Admin</h2>
         <div className="md:hidden w-10 h-10 bg-primary rounded-sm mx-auto" />
       </div>
 

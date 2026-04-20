@@ -175,7 +175,7 @@ export default function DishCard({
         <div className="mt-auto pt-16 flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-primary/60 text-[9px] uppercase tracking-widest font-bold mb-1">Elaboración artesanal</span>
-            <span className="font-serif italic text-ink text-lg">Menú Like Signature</span>
+            <span className="font-serif italic text-ink text-lg">Firma de Menú Like</span>
           </div>
           <button className="text-slate-200 hover:text-primary transition-colors p-2">
             <MoreHorizontal className="w-7 h-7" />

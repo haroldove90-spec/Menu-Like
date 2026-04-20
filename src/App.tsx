@@ -75,14 +75,14 @@ export default function App() {
             <AdminDishForm />
           ) : adminView === 'metrics' ? (
             <div className="max-w-4xl mx-auto py-20 text-center">
-              <h1 className="font-serif text-ink text-5xl mb-8"> Culinary Analytics </h1>
+              <h1 className="font-serif text-ink text-5xl mb-8"> Analíticas Culinarias </h1>
               <p className="text-slate-400 italic">Las métricas de rendimiento estarán disponibles próximamente.</p>
             </div>
           ) : (
             <div className="max-w-6xl mx-auto py-12">
               <header className="mb-12 flex items-center justify-between">
                 <div>
-                  <h1 className="font-serif text-ink text-5xl font-bold">Inventory Edit</h1>
+                  <h1 className="font-serif text-ink text-5xl font-bold">Editar Inventario</h1>
                   <p className="text-primary uppercase tracking-widest text-[9px] mt-2 font-bold">Gestionar el catálogo gourmet</p>
                 </div>
                 <button 
@@ -135,7 +135,7 @@ export default function App() {
           >
             <img 
               src="https://appdesignproyectos.com/menulike.png" 
-              alt="Menulike Logo" 
+              alt="Logotipo Menú Like" 
               className="h-10 md:h-12 w-auto object-contain"
               referrerPolicy="no-referrer"
             />
@@ -170,7 +170,7 @@ export default function App() {
           <div className="py-12 px-6">
             <div className="max-w-6xl mx-auto flex flex-col items-center mb-16 space-y-4">
               <span className="text-primary text-[10px] font-bold uppercase tracking-[0.4em]">Experiencia Gastronómica</span>
-              <h2 className="font-serif text-slate-500 text-xl font-light italic">Descubriendo los sabores más auténticos</h2>
+              <h2 className="font-serif text-slate-500 text-xl font-light italic">Descubriendo los sabores más auténticos de la ciudad</h2>
             </div>
 
             {loading ? (
