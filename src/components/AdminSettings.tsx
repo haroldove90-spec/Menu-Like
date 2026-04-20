@@ -126,7 +126,26 @@ export default function AdminSettings() {
           nav_bg_color: navBgColor
         });
 
-      if (error) throw error;
+      if (error) {
+        // Si el error es por la columna faltante, intentamos guardar sin el color para no bloquear al usuario
+        if (error.message?.includes('nav_bg_color')) {
+          console.warn("Columna nav_bg_color pendiente en Supabase. Guardando básicos...");
+          const { error: retryError } = await supabase
+            .from('restaurantes')
+            .upsert({
+              id: 'rest-1',
+              nombre: restName,
+              logo_url: logoUrl
+            });
+          
+          if (retryError) throw retryError;
+          
+          alert('¡Guardado parcial! Para activar el cambio de COLOR, debes ejecutar este código en el SQL Editor de Supabase:\n\nALTER TABLE restaurantes ADD COLUMN IF NOT EXISTS nav_bg_color TEXT DEFAULT \'#0F172A\';');
+          return;
+        }
+        throw error;
+      };
+      
       alert('Configuración guardada correctamente');
     } catch (err: any) {
       alert('Error al guardar: ' + err.message);
