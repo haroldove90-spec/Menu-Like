@@ -141,7 +141,7 @@ export default function AdminSettings() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8 md:py-12 px-2 md:px-6">
+    <div className="max-w-4xl mx-auto py-8 md:py-12 px-2 md:px-6 overflow-x-hidden">
       <header className="mb-8 md:mb-12 px-2">
         <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-4 italic">Ajustes del Restaurante</h1>
         <p className="text-primary/60 uppercase tracking-[0.3em] text-[8px] md:text-[10px] font-bold">Personaliza la identidad visual de tu menú</p>
@@ -220,10 +220,10 @@ export default function AdminSettings() {
             <p className="text-slate-400 text-[10px] uppercase tracking-widest font-bold">Crea y organiza las secciones de tu menú</p>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input 
               type="text"
-              className="flex-grow bg-slate-50 border-b border-slate-200 py-3 px-4 text-ink focus:border-primary outline-none transition-colors"
+              className="flex-grow bg-slate-50 border-b border-slate-200 py-3 px-4 text-ink focus:border-primary outline-none transition-colors rounded-xl md:rounded-none"
               placeholder="Nueva categoría (ej: Especialidades)"
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
@@ -231,13 +231,14 @@ export default function AdminSettings() {
             />
             <button 
               onClick={handleAddCategory}
-              className="bg-primary text-white p-3 rounded-xl hover:bg-ink transition-colors"
+              className="bg-primary text-white p-4 sm:p-3 rounded-xl hover:bg-ink transition-colors flex items-center justify-center"
             >
               <Plus className="w-6 h-6" />
+              <span className="sm:hidden ml-2 font-bold uppercase tracking-widest text-[10px]">Añadir</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mt-6">
             <AnimatePresence>
               {categories.map((cat) => (
                 <motion.div 

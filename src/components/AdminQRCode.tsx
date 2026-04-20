@@ -28,11 +28,17 @@ export default function AdminQRCode() {
     const canvas = document.querySelector('canvas');
     if (!canvas) return;
     
-    // Create a temporary canvas to add padding and background if needed
-    const link = document.createElement('a');
-    link.download = `QR-${restaurant?.nombre || 'Menu'}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    try {
+      const link = document.createElement('a');
+      link.download = `QR-${restaurant?.nombre || 'Menu'}.png`;
+      link.href = canvas.toDataURL('image/png');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error('Error downloading QR:', err);
+      alert('Error al descargar la imagen. Intenta guardarla manualmente.');
+    }
   };
 
   const printQR = () => {
@@ -46,20 +52,29 @@ export default function AdminQRCode() {
     try {
       canvas.toBlob(async (blob) => {
         if (!blob) return;
-        const file = new File([blob], 'menu-qr.png', { type: 'image/png' });
+        const file = new File([blob], 'menu-restaurante-qr.png', { type: 'image/png' });
         
-        if (navigator.share) {
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             title: `Menú de ${restaurant?.nombre}`,
-            text: 'Escanea para ver nuestro menú digital',
+            text: 'Descubre nuestra propuesta gastronómica escaneando este código.',
             files: [file],
           });
         } else {
-          alert('Tu navegador no soporta la función de compartir archivos.');
+          // Fallback: Copy URL
+          await navigator.clipboard.writeText(menuUrl);
+          alert('Copiado: El enlace de tu menú se ha copiado al portapapeles (Tu navegador no permite compartir archivos directamente).');
         }
       });
     } catch (err) {
       console.error('Error sharing:', err);
+      // Final Fallback
+      try {
+        await navigator.clipboard.writeText(menuUrl);
+        alert('Enlace copiado al portapapeles.');
+      } catch (copyErr) {
+        alert('No se pudo compartir ni copiar el enlace.');
+      }
     }
   };
 
