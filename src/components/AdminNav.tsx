@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, PlusCircle, BarChart3, LogOut, Settings } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, BarChart3, LogOut, Settings, QrCode } from 'lucide-react';
 
 interface AdminNavProps {
   activeView: string;
@@ -12,6 +12,7 @@ export default function AdminNav({ activeView, onViewChange, onLogout }: AdminNa
     { id: 'dashboard', label: 'Inicio', icon: LayoutDashboard },
     { id: 'new', label: 'Nuevo Platillo', icon: PlusCircle },
     { id: 'metrics', label: 'Estadísticas', icon: BarChart3 },
+    { id: 'qrcode', label: 'Código QR', icon: QrCode },
     { id: 'settings', label: 'Ajustes', icon: Settings },
   ];
 

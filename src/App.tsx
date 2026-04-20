@@ -4,6 +4,7 @@ import FavoritesView from './components/FavoritesView';
 import AdminDishForm from './components/AdminDishForm';
 import AdminSettings from './components/AdminSettings';
 import AdminMetrics from './components/AdminMetrics';
+import AdminQRCode from './components/AdminQRCode';
 import AdminNav from './components/AdminNav';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 import { toggleLikePlatillo, toggleSavePlatillo } from './lib/social';
@@ -225,6 +226,8 @@ export default function App() {
             <AdminSettings />
           ) : adminView === 'metrics' ? (
             <AdminMetrics />
+          ) : adminView === 'qrcode' ? (
+            <AdminQRCode />
           ) : (
             <div className="max-w-6xl mx-auto px-2 md:px-0">
               <header className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-center justify-between gap-4">

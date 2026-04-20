@@ -44,39 +44,39 @@ export default function AdminMetrics() {
   const totalShares = dishes.reduce((acc, dish) => acc + (dish.shares_count || 0), 0);
 
   return (
-    <div className="max-w-6xl mx-auto py-12 px-6">
-      <header className="mb-12">
-        <h1 className="font-serif text-5xl font-bold text-ink mb-4">Métricas de Rendimiento</h1>
-        <p className="text-primary/60 uppercase tracking-[0.3em] text-[10px] font-bold">Analiza el impacto de tu carta gourmet</p>
+    <div className="max-w-6xl mx-auto py-8 md:py-12 px-4 md:px-6">
+      <header className="mb-8 md:mb-12">
+        <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-4 italic">Métricas de Rendimiento</h1>
+        <p className="text-primary/60 uppercase tracking-[0.3em] text-[8px] md:text-[10px] font-bold">Analiza el impacto de tu carta gourmet</p>
       </header>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-        <div className="bg-white p-8 border border-slate-100 rounded-3xl shadow-sm flex items-center space-x-6">
-          <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center">
-            <Heart className="w-7 h-7 fill-current" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-12 md:mb-16">
+        <div className="bg-white p-6 md:p-8 border border-slate-100 rounded-3xl shadow-sm flex items-center space-x-6">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center flex-shrink-0">
+            <Heart className="w-6 h-6 md:w-7 md:h-7 fill-current" />
           </div>
           <div>
             <span className="text-slate-400 text-[10px] uppercase font-bold tracking-widest block mb-1">Total Likes</span>
-            <span className="text-3xl font-bold text-ink">{totalLikes}</span>
+            <span className="text-2xl md:text-3xl font-bold text-ink">{totalLikes}</span>
           </div>
         </div>
-        <div className="bg-white p-8 border border-slate-100 rounded-3xl shadow-sm flex items-center space-x-6">
-          <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center">
-            <Bookmark className="w-7 h-7 fill-current" />
+        <div className="bg-white p-6 md:p-8 border border-slate-100 rounded-3xl shadow-sm flex items-center space-x-6">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center flex-shrink-0">
+            <Bookmark className="w-6 h-6 md:w-7 md:h-7 fill-current" />
           </div>
           <div>
-            <span className="text-slate-400 text-[10px] uppercase font-bold tracking-widest block mb-1">Guardados (Mi Menú)</span>
-            <span className="text-3xl font-bold text-ink">{totalSaves}</span>
+            <span className="text-slate-400 text-[10px] uppercase font-bold tracking-widest block mb-1">Guardados</span>
+            <span className="text-2xl md:text-3xl font-bold text-ink">{totalSaves}</span>
           </div>
         </div>
-        <div className="bg-white p-8 border border-slate-100 rounded-3xl shadow-sm flex items-center space-x-6">
-          <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center">
-            <Share2 className="w-7 h-7" />
+        <div className="bg-white p-6 md:p-8 border border-slate-100 rounded-3xl shadow-sm flex items-center space-x-6 sm:col-span-2 lg:col-span-1">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center flex-shrink-0">
+            <Share2 className="w-6 h-6 md:w-7 md:h-7" />
           </div>
           <div>
             <span className="text-slate-400 text-[10px] uppercase font-bold tracking-widest block mb-1">Compartidos</span>
-            <span className="text-3xl font-bold text-ink">{totalShares}</span>
+            <span className="text-2xl md:text-3xl font-bold text-ink">{totalShares}</span>
           </div>
         </div>
       </div>
