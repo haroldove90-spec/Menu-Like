@@ -85,30 +85,18 @@ export default function App() {
       const sessionId = localStorage.getItem('social_menu_session');
       
       // Consulta base
-      let query = supabase.from('platillos').select('*');
+      const { data, error } = await supabase
+        .from('platillos')
+        .select('*')
+        .order('created_at', { ascending: false });
       
-      // Aplicar filtros de forma segura
+      if (error) throw error;
+
+      // Filtrar por disponibilidad solo si no estamos en el panel de administración
+      let rawDishes = data || [];
       if (activeTab !== 'admin') {
-        // En lugar de un .or complejo que puede fallar si la columna no existe 
-        // o si Supabase tiene problemas con esa sintaxis, traemos y filtramos localmente
-        // o usamos un filtro más simple.
-        query = query.filter('disponible', 'neq', false);
+        rawDishes = rawDishes.filter(d => d.disponible !== false);
       }
-
-      const { data, error } = await query.order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error("Error de Supabase:", error);
-        // Si hay error (ej: columna no existe), intentamos traer todo sin filtros
-        const { data: fallbackData } = await supabase.from('platillos').select('*').order('created_at', { ascending: false });
-        if (fallbackData) {
-          setDishes(fallbackData);
-          return;
-        }
-        throw error;
-      }
-
-      const rawDishes = data || [];
 
       // Enriquecer con estados de interacción si hay sesión
       if (sessionId && rawDishes.length > 0) {
@@ -431,9 +419,15 @@ export default function App() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-[1200px] mx-auto px-4">
-                {dishes.filter(d => selectedCategory === 'todos' || d.categoria === selectedCategory).length > 0 ? 
+                {dishes.filter(d => 
+                  selectedCategory === 'todos' || 
+                  (d.categoria && d.categoria.toLowerCase() === selectedCategory.toLowerCase())
+                ).length > 0 ? 
                   dishes
-                    .filter(d => selectedCategory === 'todos' || d.categoria === selectedCategory)
+                    .filter(d => 
+                      selectedCategory === 'todos' || 
+                      (d.categoria && d.categoria.toLowerCase() === selectedCategory.toLowerCase())
+                    )
                     .map((dish) => (
                       <DishCard 
                         key={dish.id} 
