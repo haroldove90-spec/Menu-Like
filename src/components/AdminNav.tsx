@@ -46,11 +46,11 @@ export default function AdminNav({ activeView, onViewChange, onLogout, customBgC
               onClick={() => onViewChange(item.id)}
               className={`relative flex flex-col md:flex-row items-center md:space-x-4 p-2 md:p-4 rounded-xl transition-all group md:w-full h-full md:h-auto ${
                 isActive 
-                  ? 'md:bg-primary/20' 
+                  ? 'md:bg-white/10' 
                   : 'hover:text-slate-200 md:hover:bg-white/5'
               }`}
               style={{
-                color: isActive ? (customTextColor || '#FFFFFF') : (customTextColor ? `${customTextColor}99` : '#64748b')
+                color: isActive ? '#FFFFFF' : (customTextColor ? `${customTextColor}99` : '#64748b')
               }}
             >
               {/* Mobile Active Background */}
@@ -58,14 +58,13 @@ export default function AdminNav({ activeView, onViewChange, onLogout, customBgC
                 <motion.div 
                   layoutId="admin-bubble"
                   className="absolute inset-x-0 inset-y-1 rounded-2xl md:hidden -z-10"
-                  style={{ backgroundColor: customTextColor ? `${customTextColor}15` : 'rgba(255,255,255,0.1)' }}
+                  style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
               
               <Icon 
-                className={`w-5 h-5 flex-shrink-0 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} 
-                style={{ color: isActive ? '#E63946' : 'inherit' }}
+                className={`w-5 h-5 flex-shrink-0 transition-transform duration-300 ${isActive ? 'scale-110 text-white' : 'group-hover:scale-110'}`} 
               />
               <span className={`text-[7px] md:text-[11px] mt-1 md:mt-0 font-bold uppercase tracking-wider md:tracking-widest transition-colors duration-300 ${isActive ? 'font-extrabold' : ''}`}>
                 {item.label}

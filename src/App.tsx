@@ -464,49 +464,51 @@ export default function App() {
       </main>
 
       {/* Navigation Bar */}
-      <nav 
-        className="fixed bottom-0 left-0 right-0 h-20 bg-ink border-t border-white/5 flex items-center justify-around z-50 px-6 pb-2 shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.3)] transition-colors duration-500"
-        style={{ 
-          backgroundColor: restaurant?.nav_bg_color || '#0F172A',
-          color: restaurant?.nav_text_color || '#FFFFFF'
-        }}
-      >
-        <button 
-          onClick={() => setActiveTab('feed')}
-          className="relative flex flex-col items-center justify-center h-full w-24 group"
+      <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+        <nav 
+          className="h-16 md:h-18 px-6 rounded-full border border-white/10 flex items-center justify-around w-full max-w-lg shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500 backdrop-blur-xl pointer-events-auto"
+          style={{ 
+            backgroundColor: restaurant?.nav_bg_color ? `${restaurant.nav_bg_color}cc` : 'rgba(15, 23, 42, 0.9)',
+            color: restaurant?.nav_text_color || '#FFFFFF'
+          }}
         >
-          {activeTab === 'feed' && (
-            <motion.div 
-              layoutId="bubble"
-              className="absolute inset-x-0 inset-y-2 rounded-2xl -z-10"
-              style={{ backgroundColor: restaurant?.nav_text_color ? `${restaurant.nav_text_color}15` : 'rgba(255,255,255,0.1)' }}
-              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-            />
-          )}
-          <Home className={`w-5 h-5 mb-1 transition-all duration-300 ${activeTab === 'feed' ? 'scale-110' : 'opacity-60 group-hover:opacity-100'}`} style={{ color: activeTab === 'feed' ? '#E63946' : 'inherit' }} />
-          <span className={`text-[8px] font-bold uppercase tracking-[0.2em] transition-opacity duration-300 ${activeTab === 'feed' ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
-            Cerca de ti
-          </span>
-        </button>
+          <button 
+            onClick={() => setActiveTab('feed')}
+            className="relative flex flex-col items-center justify-center h-full w-24 group px-2"
+          >
+            {activeTab === 'feed' && (
+              <motion.div 
+                layoutId="bubble"
+                className="absolute inset-x-0 inset-y-2 rounded-full -z-10"
+                style={{ backgroundColor: restaurant?.nav_text_color ? `${restaurant.nav_text_color}15` : 'rgba(255,255,255,0.1)' }}
+                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+              />
+            )}
+            <Home className={`w-5 h-5 mb-0.5 transition-all duration-300 ${activeTab === 'feed' ? 'scale-110 text-white' : 'opacity-50 group-hover:opacity-100'}`} />
+            <span className={`text-[7px] font-bold uppercase tracking-[0.2em] transition-opacity duration-300 ${activeTab === 'feed' ? 'opacity-100' : 'opacity-50 group-hover:opacity-100'}`}>
+              Cerca de ti
+            </span>
+          </button>
 
-        <button 
-          onClick={() => setActiveTab('favorites')}
-          className="relative flex flex-col items-center justify-center h-full w-24 group"
-        >
-          {activeTab === 'favorites' && (
-            <motion.div 
-              layoutId="bubble"
-              className="absolute inset-x-0 inset-y-2 rounded-2xl -z-10"
-              style={{ backgroundColor: restaurant?.nav_text_color ? `${restaurant.nav_text_color}15` : 'rgba(255,255,255,0.1)' }}
-              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-            />
-          )}
-          <Star className={`w-5 h-5 mb-1 transition-all duration-300 ${activeTab === 'favorites' ? 'scale-110' : 'opacity-60 group-hover:opacity-100'}`} style={{ color: activeTab === 'favorites' ? '#E63946' : 'inherit' }} />
-          <span className={`text-[8px] font-bold uppercase tracking-[0.2em] transition-opacity duration-300 ${activeTab === 'favorites' ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
-            Mi Menú
-          </span>
-        </button>
-      </nav>
+          <button 
+            onClick={() => setActiveTab('favorites')}
+            className="relative flex flex-col items-center justify-center h-full w-24 group px-2"
+          >
+            {activeTab === 'favorites' && (
+              <motion.div 
+                layoutId="bubble"
+                className="absolute inset-x-0 inset-y-2 rounded-full -z-10"
+                style={{ backgroundColor: restaurant?.nav_text_color ? `${restaurant.nav_text_color}15` : 'rgba(255,255,255,0.1)' }}
+                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+              />
+            )}
+            <Star className={`w-5 h-5 mb-0.5 transition-all duration-300 ${activeTab === 'favorites' ? 'scale-110 text-white' : 'opacity-50 group-hover:opacity-100'}`} />
+            <span className={`text-[7px] font-bold uppercase tracking-[0.2em] transition-opacity duration-300 ${activeTab === 'favorites' ? 'opacity-100' : 'opacity-50 group-hover:opacity-100'}`}>
+              Mi Menú
+            </span>
+          </button>
+        </nav>
+      </div>
     </div>
   );
 }
