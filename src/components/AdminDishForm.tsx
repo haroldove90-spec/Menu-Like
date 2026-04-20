@@ -110,27 +110,27 @@ export default function AdminDishForm({ dishToEdit, onSuccess, onCancel }: Admin
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-6">
-      <header className="mb-12 flex justify-between items-start">
+    <div className="max-w-4xl mx-auto py-8 md:py-12 px-4 md:px-6">
+      <header className="mb-8 md:mb-12 flex justify-between items-start">
         <div>
-          <h1 className="font-serif text-5xl font-bold text-ink mb-4">
+          <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-2 md:mb-4">
             {dishToEdit ? 'Editar Obra' : 'Nueva Creación'}
           </h1>
-          <p className="text-primary/60 uppercase tracking-[0.3em] text-[10px] font-bold">
+          <p className="text-primary/60 uppercase tracking-[0.3em] text-[8px] md:text-[10px] font-bold">
             {dishToEdit ? 'Modificar los detalles del platillo' : 'Publicar platillo en el menú digital'}
           </p>
         </div>
         {onCancel && (
           <button 
             onClick={onCancel}
-            className="p-3 text-slate-400 hover:text-ink transition-colors"
+            className="p-2 md:p-3 text-slate-400 hover:text-ink transition-colors"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 md:w-6 md:h-6" />
           </button>
         )}
       </header>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-12 border border-slate-200 shadow-xl relative overflow-hidden rounded-3xl">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 bg-white p-6 md:p-12 border border-slate-200 shadow-xl relative overflow-hidden rounded-[2rem]">
         {/* Background Accent */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-[100px] -mr-16 -mt-16" />
 

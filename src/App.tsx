@@ -108,7 +108,7 @@ export default function App() {
           onLogout={handleLogout} 
         />
         
-        <main className="flex-grow ml-24 md:ml-64 py-12 px-8 min-h-screen">
+        <main className="flex-grow md:ml-64 pb-32 md:pb-12 pt-8 md:pt-12 px-4 md:px-8 min-h-screen">
           {adminView === 'new' ? (
             <AdminDishForm 
               dishToEdit={editingDish} 
@@ -123,26 +123,29 @@ export default function App() {
               }}
             />
           ) : adminView === 'metrics' ? (
-            <div className="max-w-4xl mx-auto py-20 text-center">
-              <h1 className="font-serif text-ink text-5xl mb-8"> Analíticas Culinarias </h1>
+            <div className="max-w-4xl mx-auto py-20 text-center px-4">
+              <h1 className="font-serif text-ink text-3xl md:text-5xl mb-8"> Analíticas Culinarias </h1>
               <p className="text-slate-400 italic">Las métricas de rendimiento estarán disponibles próximamente.</p>
             </div>
           ) : (
-            <div className="max-w-6xl mx-auto py-12">
-              <header className="mb-12 flex items-center justify-between">
+            <div className="max-w-6xl mx-auto px-2 md:px-0">
+              <header className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h1 className="font-serif text-ink text-5xl font-bold">Editar Inventario</h1>
-                  <p className="text-primary uppercase tracking-widest text-[9px] mt-2 font-bold">Gestionar el catálogo gourmet</p>
+                  <h1 className="font-serif text-ink text-3xl md:text-5xl font-bold">Editar Inventario</h1>
+                  <p className="text-primary uppercase tracking-widest text-[8px] md:text-[9px] mt-2 font-bold">Gestionar el catálogo gourmet</p>
                 </div>
                 <button 
-                  onClick={() => setAdminView('new')}
-                  className="bg-primary px-8 py-3 text-white text-[10px] font-bold uppercase tracking-widest hover:bg-ink transition-all rounded-full shadow-lg"
+                  onClick={() => {
+                    setEditingDish(null);
+                    setAdminView('new');
+                  }}
+                  className="bg-primary w-full md:w-auto px-8 py-3 text-white text-[10px] font-bold uppercase tracking-widest hover:bg-ink transition-all rounded-full shadow-lg"
                 >
                   Agregar Nuevo
                 </button>
               </header>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 {dishes.map((dish) => (
                   <DishCard 
                     key={dish.id} 
