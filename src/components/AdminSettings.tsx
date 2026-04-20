@@ -141,10 +141,10 @@ export default function AdminSettings() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-6">
-      <header className="mb-12">
-        <h1 className="font-serif text-5xl font-bold text-ink mb-4">Ajustes del Restaurante</h1>
-        <p className="text-primary/60 uppercase tracking-[0.3em] text-[10px] font-bold">Personaliza la identidad visual de tu menú</p>
+    <div className="max-w-4xl mx-auto py-8 md:py-12 px-4 md:px-6">
+      <header className="mb-8 md:mb-12">
+        <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-4 italic">Ajustes del Restaurante</h1>
+        <p className="text-primary/60 uppercase tracking-[0.3em] text-[8px] md:text-[10px] font-bold">Personaliza la identidad visual de tu menú</p>
       </header>
 
       <div className="space-y-12">

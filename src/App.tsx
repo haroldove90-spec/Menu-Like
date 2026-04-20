@@ -232,7 +232,7 @@ export default function App() {
             <div className="max-w-6xl mx-auto px-2 md:px-0">
               <header className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h1 className="font-serif text-ink text-3xl md:text-5xl font-bold">Editar Inventario</h1>
+                  <h1 className="font-serif text-ink text-3xl md:text-5xl font-bold italic">Editar Inventario</h1>
                   <p className="text-primary uppercase tracking-widest text-[8px] md:text-[9px] mt-2 font-bold">Gestionar el catálogo gourmet</p>
                 </div>
                 <button 

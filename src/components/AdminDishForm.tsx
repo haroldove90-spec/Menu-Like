@@ -137,7 +137,7 @@ export default function AdminDishForm({ dishToEdit, onSuccess, onCancel }: Admin
     <div className="max-w-4xl mx-auto py-8 md:py-12 px-4 md:px-6">
       <header className="mb-8 md:mb-12 flex justify-between items-start">
         <div>
-          <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-2 md:mb-4">
+          <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-2 md:mb-4 italic">
             {dishToEdit ? 'Editar Obra' : 'Nueva Creación'}
           </h1>
           <p className="text-primary/60 uppercase tracking-[0.3em] text-[8px] md:text-[10px] font-bold">
