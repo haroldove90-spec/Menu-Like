@@ -30,13 +30,17 @@ export default function App() {
       
       // Si no es la pestaña admin, solo mostrar platillos disponibles
       if (activeTab !== 'admin') {
-        query = query.eq('disponible', true);
+        const { data, error } = await query
+          .or('disponible.eq.true,disponible.is.null')
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        setDishes(data || []);
+      } else {
+        const { data, error } = await query.order('created_at', { ascending: false });
+        if (error) throw error;
+        setDishes(data || []);
       }
-
-      const { data, error } = await query.order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      setDishes(data || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -138,7 +142,7 @@ export default function App() {
                 </button>
               </header>
 
-              <div className="grid grid-cols-1 gap-16">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {dishes.map((dish) => (
                   <DishCard 
                     key={dish.id} 
@@ -224,7 +228,7 @@ export default function App() {
                 <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
               </div>
             ) : (
-              <div className="space-y-16">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
                 {dishes.length > 0 ? dishes.map((dish) => (
                   <DishCard 
                     key={dish.id} 
