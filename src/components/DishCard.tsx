@@ -1,5 +1,5 @@
 import React, { useOptimistic, useTransition } from 'react';
-import { Heart, Bookmark, Share2, MoreHorizontal, Edit3, EyeOff, X } from 'lucide-react';
+import { Heart, Bookmark, Share2, MoreHorizontal, Edit3, Eye, EyeOff, X } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export interface Dish {
@@ -137,9 +137,14 @@ export default function DishCard({
             </button>
             <button 
               onClick={(e) => { e.stopPropagation(); onToggleVisibility?.(dish.id, !!dish.disponible); }}
-              className={`w-6 h-6 bg-white/90 border border-slate-100 rounded-full flex items-center justify-center shadow-sm ${dish.disponible === false ? 'bg-amber-500 text-white' : 'text-slate-600'}`}
+              className={`w-6 h-6 rounded-full flex items-center justify-center shadow-sm transition-colors ${
+                dish.disponible === false 
+                  ? 'bg-amber-500 text-white border-amber-600' 
+                  : 'bg-white/90 text-slate-600 border border-slate-100'
+              }`}
+              title={dish.disponible === false ? "Mostrar producto" : "Ocultar producto"}
             >
-              <EyeOff className="w-3 h-3" />
+              {dish.disponible === false ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
             </button>
             <button 
               onClick={(e) => { 

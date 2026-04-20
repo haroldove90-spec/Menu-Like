@@ -9,9 +9,8 @@ interface AdminNavProps {
 
 export default function AdminNav({ activeView, onViewChange, onLogout }: AdminNavProps) {
   const menuItems = [
-    { id: 'dashboard', label: 'Inicio', icon: LayoutDashboard },
-    { id: 'new', label: 'Nuevo Platillo', icon: PlusCircle },
-    { id: 'metrics', label: 'Estadísticas', icon: BarChart3 },
+    { id: 'dashboard', label: 'Inicio', icon: BarChart3 },
+    { id: 'new', label: 'Inventario', icon: PlusCircle },
     { id: 'qrcode', label: 'Código QR', icon: QrCode },
     { id: 'settings', label: 'Ajustes', icon: Settings },
   ];

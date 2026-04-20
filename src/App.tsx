@@ -14,6 +14,7 @@ import { AlertCircle, Menu as MenuIcon, X } from 'lucide-react';
 export default function App() {
   const [activeTab, setActiveTab] = useState<'feed' | 'favorites' | 'admin'>('feed');
   const [adminView, setAdminView] = useState('dashboard');
+  const [adminCategoryFilter, setAdminCategoryFilter] = useState('todos');
   const [user, setUser] = useState<any>(null);
   const [editingDish, setEditingDish] = useState<Dish | null>(null);
   const [dishes, setDishes] = useState<Dish[]>([]);
@@ -181,6 +182,8 @@ export default function App() {
   const handleEdit = (dish: Dish) => {
     setEditingDish(dish);
     setAdminView('new'); 
+    // Hacer scroll al formulario para facilitar la edición
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleToggleVisibility = async (id: string, current: boolean) => {
@@ -245,58 +248,74 @@ export default function App() {
         
         <main className="flex-grow md:ml-64 pb-32 md:pb-12 pt-8 md:pt-12 px-2 md:px-8 min-h-screen w-full overflow-x-hidden">
           {adminView === 'new' ? (
-            <AdminDishForm 
-              dishToEdit={editingDish} 
-              onSuccess={() => {
-                setEditingDish(null);
-                setAdminView('dashboard');
-                loadDishes();
-              }} 
-              onCancel={() => {
-                setEditingDish(null);
-                setAdminView('dashboard');
-              }}
-            />
+            <div className="max-w-6xl mx-auto space-y-16">
+              <AdminDishForm 
+                dishToEdit={editingDish} 
+                onSuccess={() => {
+                  setEditingDish(null);
+                  loadDishes();
+                }} 
+                onCancel={() => {
+                  setEditingDish(null);
+                }}
+              />
+              
+              <div className="pt-12 border-t border-slate-200">
+                <header className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  <div>
+                    <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink italic">Inventario Registrado</h2>
+                    <p className="text-primary uppercase tracking-widest text-[8px] font-bold mt-2">Gestionar productos desde el más reciente</p>
+                  </div>
+                  
+                  {/* Category Filter for Admin */}
+                  <div className="flex overflow-x-auto pb-2 -mx-2 px-2 md:mx-0 md:px-0 space-x-2 scrollbar-none">
+                    <button
+                      onClick={() => setAdminCategoryFilter('todos')}
+                      className={`px-6 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold transition-all whitespace-nowrap ${
+                        adminCategoryFilter === 'todos' ? 'bg-primary text-white shadow-lg' : 'bg-white border border-slate-200 text-slate-400 hover:border-primary'
+                      }`}
+                    >
+                      Todos
+                    </button>
+                    {categories.map(cat => (
+                      <button
+                        key={cat.id}
+                        onClick={() => setAdminCategoryFilter(cat.nombre)}
+                        className={`px-6 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold transition-all whitespace-nowrap ${
+                          adminCategoryFilter === cat.nombre ? 'bg-primary text-white shadow-lg' : 'bg-white border border-slate-200 text-slate-400 hover:border-primary'
+                        }`}
+                      >
+                        {cat.nombre}
+                      </button>
+                    ))}
+                  </div>
+                </header>
+
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
+                  {dishes
+                    .filter(d => adminCategoryFilter === 'todos' || d.categoria === adminCategoryFilter)
+                    .map((dish) => (
+                      <DishCard 
+                        key={dish.id} 
+                        dish={dish} 
+                        isAdmin={true}
+                        onLike={async () => {}}
+                        onSave={async () => {}}
+                        onShare={handleShare}
+                        onEdit={handleEdit}
+                        onToggleVisibility={handleToggleVisibility}
+                        onDelete={handleDelete}
+                      />
+                    ))}
+                </div>
+              </div>
+            </div>
           ) : adminView === 'settings' ? (
             <AdminSettings />
-          ) : adminView === 'metrics' ? (
-            <AdminMetrics />
           ) : adminView === 'qrcode' ? (
             <AdminQRCode />
           ) : (
-            <div className="max-w-6xl mx-auto px-2 md:px-0">
-              <header className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                  <h1 className="font-serif text-ink text-3xl md:text-5xl font-bold italic">Editar Inventario</h1>
-                  <p className="text-primary uppercase tracking-widest text-[8px] md:text-[9px] mt-2 font-bold">Gestionar el catálogo gourmet</p>
-                </div>
-                <button 
-                  onClick={() => {
-                    setEditingDish(null);
-                    setAdminView('new');
-                  }}
-                  className="bg-primary w-full md:w-auto px-8 py-3 text-white text-[10px] font-bold uppercase tracking-widest hover:bg-ink transition-all rounded-full shadow-lg"
-                >
-                  Agregar Nuevo
-                </button>
-              </header>
-
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
-                {dishes.map((dish) => (
-                  <DishCard 
-                    key={dish.id} 
-                    dish={dish} 
-                    isAdmin={true}
-                    onLike={async () => {}}
-                    onSave={async () => {}}
-                    onShare={handleShare}
-                    onEdit={handleEdit}
-                    onToggleVisibility={handleToggleVisibility}
-                    onDelete={handleDelete}
-                  />
-                ))}
-              </div>
-            </div>
+            <AdminMetrics />
           )}
         </main>
       </div>
