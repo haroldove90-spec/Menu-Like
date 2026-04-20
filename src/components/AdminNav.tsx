@@ -17,7 +17,7 @@ export default function AdminNav({ activeView, onViewChange, onLogout }: AdminNa
 
   return (
     <div className="fixed bottom-0 left-0 right-0 h-20 bg-white border-t border-slate-200 md:border-t-0 md:border-r md:left-0 md:top-0 md:bottom-0 md:w-64 md:h-full flex md:flex-col items-center justify-around md:justify-start md:py-10 z-[100] px-4 md:px-0 shadow-lg md:shadow-none">
-      <div className="hidden md:block mb-20 px-4 text-center">
+      <div className="hidden md:block mb-20 px-4 text-center cursor-pointer" onClick={() => onViewChange('dashboard')}>
         <h2 className="font-serif italic text-primary text-2xl font-bold tracking-tight">Menú Like Admin</h2>
         <p className="text-[8px] uppercase tracking-[0.3em] text-slate-400 mt-1 font-bold">Gestión Gourmet</p>
       </div>

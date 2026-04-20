@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DishCard, { Dish } from './components/DishCard';
 import FavoritesView from './components/FavoritesView';
 import AdminDishForm from './components/AdminDishForm';
+import AdminSettings from './components/AdminSettings';
 import AdminNav from './components/AdminNav';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 import { toggleLikePlatillo, toggleSavePlatillo } from './lib/social';
@@ -13,8 +14,10 @@ export default function App() {
   const [editingDish, setEditingDish] = useState<Dish | null>(null);
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [loading, setLoading] = useState(true);
+  const [restaurant, setRestaurant] = useState<any>(null);
 
   useEffect(() => {
+    fetchRestaurant();
     if (isSupabaseConfigured) {
       loadDishes();
     } else {
@@ -22,12 +25,25 @@ export default function App() {
     }
   }, [activeTab]);
 
+  async function fetchRestaurant() {
+    try {
+      const { data } = await supabase.from('restaurantes').select('*').eq('id', 'rest-1').single();
+      setRestaurant(data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async function loadDishes() {
     try {
+      const sessionId = localStorage.getItem('social_menu_session');
+      
       let query = supabase
         .from('platillos')
         .select('*');
       
+      let rawDishes: any[] = [];
+
       // Si no es la pestaña admin, solo mostrar platillos disponibles
       if (activeTab !== 'admin') {
         const { data, error } = await query
@@ -35,11 +51,28 @@ export default function App() {
           .order('created_at', { ascending: false });
         
         if (error) throw error;
-        setDishes(data || []);
+        rawDishes = data || [];
       } else {
         const { data, error } = await query.order('created_at', { ascending: false });
         if (error) throw error;
-        setDishes(data || []);
+        rawDishes = data || [];
+      }
+
+      // Enriquecer con estados de interacción si hay sesión
+      if (sessionId && rawDishes.length > 0) {
+        const { data: interactions } = await supabase
+          .from('interacciones')
+          .select('platillo_id, tipo')
+          .eq('user_session_id', sessionId);
+        
+        const enriched = rawDishes.map(dish => ({
+          ...dish,
+          is_liked_by_me: interactions?.some(i => i.platillo_id === dish.id && i.tipo === 'like'),
+          is_saved_by_me: interactions?.some(i => i.platillo_id === dish.id && i.tipo === 'save')
+        }));
+        setDishes(enriched);
+      } else {
+        setDishes(rawDishes);
       }
     } catch (err) {
       console.error(err);
@@ -122,6 +155,8 @@ export default function App() {
                 setAdminView('dashboard');
               }}
             />
+          ) : adminView === 'settings' ? (
+            <AdminSettings />
           ) : adminView === 'metrics' ? (
             <div className="max-w-4xl mx-auto py-20 text-center px-4">
               <h1 className="font-serif text-ink text-3xl md:text-5xl mb-8"> Analíticas Culinarias </h1>
@@ -187,8 +222,8 @@ export default function App() {
             className="cursor-pointer transition-transform hover:scale-105"
           >
             <img 
-              src="https://appdesignproyectos.com/menulike.png" 
-              alt="Logotipo Menú Like" 
+              src={restaurant?.logo_url || "https://appdesignproyectos.com/menulike.png"} 
+              alt={restaurant?.nombre || "Logotipo Menú Like"} 
               className="h-10 md:h-12 w-auto object-contain"
               referrerPolicy="no-referrer"
             />
@@ -221,9 +256,18 @@ export default function App() {
       <main className="pb-32">
         {activeTab === 'feed' ? (
           <div className="py-12 px-6">
-            <div className="max-w-6xl mx-auto flex flex-col items-center mb-16 space-y-4">
-              <span className="text-primary text-[10px] font-bold uppercase tracking-[0.4em]">Experiencia Gastronómica</span>
-              <h2 className="font-serif text-slate-500 text-xl font-light italic">Descubriendo los sabores más auténticos de la ciudad</h2>
+            <div className="max-w-6xl mx-auto flex flex-col items-center mb-16 px-4">
+              {restaurant?.logo_url ? (
+                <img 
+                  src={restaurant.logo_url} 
+                  alt={restaurant.nombre} 
+                  className="h-24 md:h-40 object-contain"
+                />
+              ) : (
+                <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center">
+                  <span className="text-slate-300 font-serif italic">Logo</span>
+                </div>
+              )}
             </div>
 
             {loading ? (

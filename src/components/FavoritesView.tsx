@@ -47,7 +47,7 @@ export default function FavoritesView() {
 
       <AnimatePresence mode="popLayout">
         {favorites.length > 0 ? (
-          <div className="grid grid-cols-1 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {favorites.map((dish) => (
               <DishCard
                 key={dish.id}
@@ -55,7 +55,7 @@ export default function FavoritesView() {
                 onLike={async (id) => { await toggleLikePlatillo(id); }}
                 onSave={async (id) => { 
                   await toggleSavePlatillo(id); 
-                  // Remover de la vista si se des-guarda
+                  // Remover de la vista si se des-guarda (es la vista de favoritos)
                   setFavorites(prev => prev.filter(d => d.id !== id));
                 }}
                 onShare={handleShare}
