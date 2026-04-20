@@ -75,21 +75,22 @@ export default function AdminQRCode() {
   const menuUrl = window.location.origin;
 
   return (
-    <div className="max-w-4xl mx-auto py-8 md:py-12 px-4 md:px-6">
-      <header className="mb-12">
+    <div className="max-w-4xl mx-auto py-8 md:py-12 px-2 md:px-6">
+      <header className="mb-8 md:mb-12 px-2">
         <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-4 italic">Código QR del Menú</h1>
         <p className="text-primary/60 uppercase tracking-[0.3em] text-[8px] md:text-[10px] font-bold">Genera el acceso directo para tus clientes</p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
         {/* QR Preview Card */}
-        <div className="bg-white p-8 md:p-12 border border-slate-200 shadow-2xl rounded-[2.5rem] flex flex-col items-center text-center space-y-8 sticky top-8">
-          <div className="bg-slate-50 p-8 rounded-[2rem] border-4 border-double border-slate-100 shadow-inner" id="printable-qr">
+        <div className="bg-white p-4 md:p-12 border border-slate-200 shadow-2xl rounded-[2rem] md:rounded-[2.5rem] flex flex-col items-center text-center space-y-6 md:space-y-8 md:sticky md:top-8">
+          <div className="bg-slate-50 p-4 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-4 border-double border-slate-100 shadow-inner w-full flex justify-center" id="printable-qr">
             <QRCodeCanvas
               value={menuUrl}
-              size={280}
+              size={typeof window !== 'undefined' && window.innerWidth < 400 ? 200 : 280}
               level="H"
               includeMargin={true}
+              style={{ maxWidth: '100%', height: 'auto' }}
               imageSettings={restaurant?.logo_url ? {
                 src: restaurant.logo_url,
                 x: undefined,
@@ -103,7 +104,7 @@ export default function AdminQRCode() {
           
           <div className="space-y-2">
             <h2 className="font-serif text-2xl font-bold text-ink">{restaurant?.nombre || 'Tu Restaurante'}</h2>
-            <p className="text-slate-400 text-xs font-serif italic text-balance">Escanea para descubrir nuestra carta digital y disfrutar de una experiencia gourmet única.</p>
+            <p className="text-slate-400 text-xs font-serif italic text-balance px-4">Escanea para descubrir nuestra carta digital y disfrutar de una experiencia gourmet única.</p>
           </div>
 
           <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
@@ -115,9 +116,9 @@ export default function AdminQRCode() {
         </div>
 
         {/* Actions & Instructions */}
-        <div className="space-y-8">
-          <div className="bg-white p-8 border border-slate-100 rounded-3xl shadow-sm space-y-6">
-            <h3 className="font-bold text-ink text-lg">Acciones Rápidas</h3>
+        <div className="space-y-6 md:space-y-8 pb-12">
+          <div className="bg-white p-6 md:p-8 border border-slate-100 rounded-3xl shadow-sm space-y-6">
+            <h3 className="font-bold text-ink text-lg italic font-serif">Acciones Rápidas</h3>
             <div className="grid grid-cols-1 gap-3">
               <button 
                 onClick={downloadQR}
@@ -125,7 +126,7 @@ export default function AdminQRCode() {
               >
                 <div className="flex items-center space-x-3">
                   <Download className="w-5 h-5" />
-                  <span className="font-bold text-sm uppercase tracking-widest">Descargar Imagen</span>
+                  <span className="font-bold text-xs md:text-sm uppercase tracking-widest">Descargar Imagen</span>
                 </div>
                 <div className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">PNG</div>
               </button>
@@ -136,7 +137,7 @@ export default function AdminQRCode() {
               >
                 <div className="flex items-center space-x-3">
                   <Share2 className="w-5 h-5" />
-                  <span className="font-bold text-sm uppercase tracking-widest">Compartir</span>
+                  <span className="font-bold text-xs md:text-sm uppercase tracking-widest">Compartir</span>
                 </div>
                 <div className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">Móvil</div>
               </button>
@@ -147,27 +148,30 @@ export default function AdminQRCode() {
               >
                 <div className="flex items-center space-x-3">
                   <Printer className="w-5 h-5" />
-                  <span className="font-bold text-sm uppercase tracking-widest">Imprimir</span>
+                  <span className="font-bold text-xs md:text-sm uppercase tracking-widest">Imprimir</span>
                 </div>
                 <div className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">A4 / Carta</div>
               </button>
             </div>
           </div>
 
-          <div className="bg-slate-900 p-8 rounded-3xl text-white space-y-4">
-            <h3 className="font-serif italic text-xl">¿Dónde usar tu QR?</h3>
-            <ul className="space-y-3 text-slate-400 text-sm">
-              <li className="flex items-start space-x-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+          <div className="bg-[#0f172a] p-6 md:p-10 rounded-[2rem] text-white shadow-2xl relative overflow-hidden border border-blue-500/20">
+            {/* Decorative element */}
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl" />
+            
+            <h3 className="font-serif italic text-2xl md:text-3xl mb-6 relative z-10 text-blue-200">¿Dónde usar tu QR?</h3>
+            <ul className="space-y-4 text-slate-300 text-sm md:text-base relative z-10">
+              <li className="flex items-start space-x-4">
+                <span className="w-2 h-2 rounded-full bg-blue-500 mt-2 flex-shrink-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
                 <span>Colócalo en cada mesa para un acceso sin contacto.</span>
               </li>
-              <li className="flex items-start space-x-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+              <li className="flex items-start space-x-4">
+                <span className="w-2 h-2 rounded-full bg-blue-500 mt-2 flex-shrink-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
                 <span>Publícalo en tus redes sociales para pedidos programados.</span>
               </li>
-              <li className="flex items-start space-x-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                <span>Inclúyelo en la entrada de tu establecimiento.</span>
+              <li className="flex items-start space-x-4">
+                <span className="w-2 h-2 rounded-full bg-blue-500 mt-2 flex-shrink-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+                <span>Inclúyelo en la entrada de tu establecimiento para que los clientes vean el menú antes de entrar.</span>
               </li>
             </ul>
           </div>

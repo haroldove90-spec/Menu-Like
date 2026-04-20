@@ -44,8 +44,8 @@ export default function AdminMetrics() {
   const totalShares = dishes.reduce((acc, dish) => acc + (dish.shares_count || 0), 0);
 
   return (
-    <div className="max-w-6xl mx-auto py-8 md:py-12 px-4 md:px-6">
-      <header className="mb-8 md:mb-12">
+    <div className="max-w-6xl mx-auto py-8 md:py-12 px-2 md:px-6">
+      <header className="mb-8 md:mb-12 px-2">
         <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-4 italic">Métricas de Rendimiento</h1>
         <p className="text-primary/60 uppercase tracking-[0.3em] text-[8px] md:text-[10px] font-bold">Analiza el impacto de tu carta gourmet</p>
       </header>
@@ -87,12 +87,12 @@ export default function AdminMetrics() {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold">Platillo</th>
-                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold">Categoría</th>
-                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold text-center"><Heart className="w-4 h-4 mx-auto" /></th>
-                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold text-center"><Bookmark className="w-4 h-4 mx-auto" /></th>
-                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold text-center"><Share2 className="w-4 h-4 mx-auto" /></th>
-                <th className="px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold text-right">Rendimiento</th>
+                <th className="px-4 md:px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold">Platillo</th>
+                <th className="px-4 md:px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold">Categoría</th>
+                <th className="px-4 md:px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold text-center"><Heart className="w-4 h-4 mx-auto" /></th>
+                <th className="px-4 md:px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold text-center"><Bookmark className="w-4 h-4 mx-auto" /></th>
+                <th className="px-4 md:px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold text-center"><Share2 className="w-4 h-4 mx-auto" /></th>
+                <th className="px-4 md:px-8 py-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold text-right">Rendimiento</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-ink">
@@ -107,27 +107,27 @@ export default function AdminMetrics() {
                     key={dish.id} 
                     className="hover:bg-slate-50/50 transition-colors"
                   >
-                    <td className="px-8 py-6">
+                    <td className="px-4 md:px-8 py-6">
                       <div className="flex items-center space-x-4">
                         <img 
                           src={dish.imagen_url} 
-                          className="w-12 h-12 rounded-lg object-cover"
+                          className="w-10 h-10 md:w-12 md:h-12 rounded-lg object-cover"
                           alt={dish.nombre}
                         />
-                        <span className="font-serif italic font-bold">{dish.nombre}</span>
+                        <span className="font-serif italic font-bold text-sm md:text-base">{dish.nombre}</span>
                       </div>
                     </td>
-                    <td className="px-8 py-6">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/5 px-3 py-1 rounded-full">
+                    <td className="px-4 md:px-8 py-6">
+                      <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/5 px-3 py-1 rounded-full">
                         {dish.categoria}
                       </span>
                     </td>
-                    <td className="px-8 py-6 text-center font-bold">{dish.likes_count || 0}</td>
-                    <td className="px-8 py-6 text-center font-bold">{dish.saves_count || 0}</td>
-                    <td className="px-8 py-6 text-center font-bold">{dish.shares_count || 0}</td>
-                    <td className="px-8 py-6 text-right">
+                    <td className="px-4 md:px-8 py-6 text-center font-bold">{dish.likes_count || 0}</td>
+                    <td className="px-4 md:px-8 py-6 text-center font-bold">{dish.saves_count || 0}</td>
+                    <td className="px-4 md:px-8 py-6 text-center font-bold">{dish.shares_count || 0}</td>
+                    <td className="px-4 md:px-8 py-6 text-right">
                       <div className="flex items-center justify-end space-x-2">
-                        <div className="w-24 bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div className="hidden sm:block w-24 bg-slate-100 h-2 rounded-full overflow-hidden">
                           <div 
                             className="bg-primary h-full" 
                             style={{ width: `${percentage}%` }}

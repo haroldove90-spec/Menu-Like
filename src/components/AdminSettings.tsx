@@ -141,19 +141,19 @@ export default function AdminSettings() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8 md:py-12 px-4 md:px-6">
-      <header className="mb-8 md:mb-12">
+    <div className="max-w-4xl mx-auto py-8 md:py-12 px-2 md:px-6">
+      <header className="mb-8 md:mb-12 px-2">
         <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-4 italic">Ajustes del Restaurante</h1>
         <p className="text-primary/60 uppercase tracking-[0.3em] text-[8px] md:text-[10px] font-bold">Personaliza la identidad visual de tu menú</p>
       </header>
 
-      <div className="space-y-12">
+      <div className="space-y-6 md:space-y-12">
         {/* Identidad Visual */}
-        <div className="bg-white p-8 md:p-12 border border-slate-200 shadow-xl rounded-[2rem] space-y-12">
+        <div className="bg-white p-5 md:p-12 border border-slate-200 shadow-xl rounded-[1.5rem] md:rounded-[2rem] space-y-8 md:space-y-12">
           {/* Logo Section */}
           <div className="space-y-6">
             <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Logotipo del Restaurante</label>
-            <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
               <div className="relative w-40 h-40 bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl flex items-center justify-center overflow-hidden group">
                 {logoUrl ? (
                   <img src={logoUrl} alt="Logo preview" className="w-full h-full object-contain p-4" />
@@ -214,9 +214,9 @@ export default function AdminSettings() {
         </div>
 
         {/* Gestión de Categorías */}
-        <div className="bg-white p-8 md:p-12 border border-slate-200 shadow-xl rounded-[2rem] space-y-8">
+        <div className="bg-white p-5 md:p-12 border border-slate-200 shadow-xl rounded-[1.5rem] md:rounded-[2rem] space-y-8">
           <div>
-            <h2 className="font-serif text-3xl font-bold text-ink mb-2">Gestión de Categorías</h2>
+            <h2 className="font-serif text-2xl md:text-3xl font-bold text-ink mb-2">Gestión de Categorías</h2>
             <p className="text-slate-400 text-[10px] uppercase tracking-widest font-bold">Crea y organiza las secciones de tu menú</p>
           </div>
 
