@@ -29,7 +29,7 @@ export default function AdminNav({ activeView, onViewChange, onLogout, customBgC
       <div className="hidden md:block mb-20 px-4 text-center cursor-pointer" onClick={() => onViewChange('dashboard')}>
         <h2 className="font-serif italic text-primary text-2xl font-bold tracking-tight">Menú Like Admin</h2>
         <p 
-          className="text-[8px] uppercase tracking-[0.3em] mt-1 font-bold opacity-60"
+          className="text-[8px] md:text-[10px] uppercase tracking-[0.3em] mt-1 font-bold opacity-60"
           style={{ color: customTextColor || '#FFFFFF' }}
         >
           Gestión Gourmet
@@ -66,7 +66,7 @@ export default function AdminNav({ activeView, onViewChange, onLogout, customBgC
               <Icon 
                 className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${isActive ? 'scale-110 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]' : 'group-hover:scale-110'}`} 
               />
-              <span className={`text-[7px] md:text-[11px] mt-1 md:mt-0 font-bold uppercase tracking-wider md:tracking-widest transition-colors duration-300 ${isActive ? 'font-extrabold' : ''}`}>
+              <span className={`text-[7px] md:text-[14px] mt-1 md:mt-0 font-bold uppercase tracking-wider md:tracking-widest transition-colors duration-300 ${isActive ? 'font-extrabold' : ''}`}>
                 {item.label}
               </span>
             </button>
@@ -91,7 +91,7 @@ export default function AdminNav({ activeView, onViewChange, onLogout, customBgC
           style={{ color: customTextColor || '#EF4444' }}
         >
           <LogOut className="w-5 h-5 flex-shrink-0" />
-          <span className="text-[11px] font-bold uppercase tracking-widest">Cerrar Sesión</span>
+          <span className="text-[14px] font-bold uppercase tracking-widest">Cerrar Sesión</span>
         </button>
       </div>
     </div>

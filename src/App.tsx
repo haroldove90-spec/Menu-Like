@@ -357,7 +357,7 @@ export default function App() {
             />
           </div>
           <nav>
-            <ul className="flex space-x-6 text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500">
+            <ul className="flex space-x-6 text-[10px] md:text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">
               <li 
                 onClick={() => setActiveTab('feed')}
                 className={`transition-colors cursor-pointer hover:text-primary ${activeTab === 'feed' ? 'text-primary' : ''}`}
@@ -464,7 +464,7 @@ export default function App() {
       </main>
 
       {/* Navigation Bar */}
-      <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+      <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none md:hidden">
         <nav 
           className="h-16 md:h-18 px-6 rounded-full border border-white/20 flex items-center justify-around w-full max-w-lg shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 backdrop-blur-2xl pointer-events-auto"
           style={{ 
