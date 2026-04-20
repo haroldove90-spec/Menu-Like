@@ -12,6 +12,8 @@ export interface Dish {
   categoria?: string;
   disponible?: boolean;
   likes_count?: number;
+  saves_count?: number;
+  shares_count?: number;
   is_liked_by_me?: boolean;
   is_saved_by_me?: boolean;
 }
@@ -103,12 +105,12 @@ export default function DishCard({
           )}
         </div>
 
-        {/* Interaction Bar Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center space-x-3 opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0 duration-500">
+        {/* Interaction Bar Overlay - Permanently Visible */}
+        <div className="absolute inset-0 flex items-center justify-center space-x-3 transition-all duration-500">
           <button 
             onClick={handleLikeClick}
             disabled={isPending}
-            className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md border transition-all ${optimisticLike.isLiked ? 'bg-primary border-primary text-white scale-110' : 'bg-white/90 border-slate-200 text-slate-400 hover:text-primary'}`}
+            className={`w-10 h-10 rounded-full flex flex-col items-center justify-center backdrop-blur-md border transition-all ${optimisticLike.isLiked ? 'bg-white border-red-500 text-red-500' : 'bg-white/90 border-slate-200 text-slate-400 hover:text-red-500'}`}
           >
             <Heart className={`w-5 h-5 ${optimisticLike.isLiked ? 'fill-current' : ''}`} />
           </button>
@@ -116,14 +118,14 @@ export default function DishCard({
           <button 
             onClick={handleSaveClick}
             disabled={isPending}
-            className={`w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md border transition-all ${optimisticSave ? 'bg-primary/20 border-primary/30 text-primary scale-110' : 'bg-white/90 border-slate-200 text-slate-400 hover:text-primary'}`}
+            className={`w-10 h-10 rounded-full flex flex-col items-center justify-center backdrop-blur-md border transition-all ${optimisticSave ? 'bg-primary border-primary text-white scale-110' : 'bg-white/90 border-slate-200 text-slate-400 hover:text-primary'}`}
           >
             <Bookmark className={`w-5 h-5 ${optimisticSave ? 'fill-current' : ''}`} />
           </button>
 
           <button 
             onClick={(e) => { e.stopPropagation(); onShare(dish.id); }}
-            className="w-10 h-10 rounded-full flex items-center justify-center bg-white/90 backdrop-blur-md border border-slate-200 text-slate-400 hover:text-primary transition-all"
+            className="w-10 h-10 rounded-full flex flex-col items-center justify-center bg-white/90 backdrop-blur-md border border-slate-200 text-slate-400 hover:text-primary transition-all"
           >
             <Share2 className="w-4 h-4" />
           </button>
@@ -175,14 +177,19 @@ export default function DishCard({
           </p>
         </div>
 
-        <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+        <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-around">
           <div className="flex items-center space-x-1.5">
-            <Heart className="w-3.5 h-3.5 text-primary fill-primary/20" />
+            <Heart className={`w-3.5 h-3.5 ${optimisticLike.isLiked ? 'text-red-500 fill-red-500' : 'text-slate-300'}`} />
             <span className="text-ink text-[11px] font-bold">{optimisticLike.count}</span>
           </div>
-          <button className="text-slate-300 hover:text-primary transition-colors">
-            <MoreHorizontal className="w-5 h-5" />
-          </button>
+          <div className="flex items-center space-x-1.5">
+            <Bookmark className={`w-3.5 h-3.5 ${optimisticSave ? 'text-primary fill-primary' : 'text-slate-300'}`} />
+            <span className="text-ink text-[11px] font-bold">{dish.saves_count || 0}</span>
+          </div>
+          <div className="flex items-center space-x-1.5">
+            <Share2 className="w-3.5 h-3.5 text-slate-300" />
+            <span className="text-ink text-[11px] font-bold">{dish.shares_count || 0}</span>
+          </div>
         </div>
       </div>
     </motion.div>

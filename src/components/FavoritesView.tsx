@@ -41,7 +41,7 @@ export default function FavoritesView() {
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary mb-6">
           <Star className="w-6 h-6 fill-current" />
         </div>
-        <h1 className="font-serif text-5xl md:text-7xl font-bold text-ink mb-4">Mis Favoritos</h1>
+        <h1 className="font-serif text-5xl md:text-7xl font-bold text-ink mb-4">Mi Menú</h1>
         <p className="text-slate-400 font-light tracking-[0.2em] uppercase text-[10px]">Tu selección culinaria personal</p>
       </header>
 

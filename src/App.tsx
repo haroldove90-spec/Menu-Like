@@ -3,6 +3,7 @@ import DishCard, { Dish } from './components/DishCard';
 import FavoritesView from './components/FavoritesView';
 import AdminDishForm from './components/AdminDishForm';
 import AdminSettings from './components/AdminSettings';
+import AdminMetrics from './components/AdminMetrics';
 import AdminNav from './components/AdminNav';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 import { toggleLikePlatillo, toggleSavePlatillo } from './lib/social';
@@ -83,14 +84,34 @@ export default function App() {
 
   const handleLike = async (id: string) => {
     await toggleLikePlatillo(id);
+    loadDishes();
   };
 
   const handleSave = async (id: string) => {
     await toggleSavePlatillo(id);
+    loadDishes();
   };
 
-  const handleShare = (id: string) => {
-    alert(`Enlace copiado para platillo ${id}`);
+  const handleShare = async (id: string) => {
+    try {
+      // Intentamos copiar al portapapeles
+      await navigator.clipboard.writeText(`${window.location.origin}/dish/${id}`);
+      
+      // Incrementar contador de compartidos en DB
+      const { data: dish } = await supabase.from('platillos').select('shares_count').eq('id', id).single();
+      const currentShares = dish?.shares_count || 0;
+      
+      await supabase
+        .from('platillos')
+        .update({ shares_count: currentShares + 1 })
+        .eq('id', id);
+
+      alert(`¡Enlace copiado! Se ha compartido este platillo.`);
+      loadDishes();
+    } catch (err) {
+      console.error(err);
+      alert('Error al compartir');
+    }
   };
 
   const handleEdit = (dish: Dish) => {
@@ -158,10 +179,7 @@ export default function App() {
           ) : adminView === 'settings' ? (
             <AdminSettings />
           ) : adminView === 'metrics' ? (
-            <div className="max-w-4xl mx-auto py-20 text-center px-4">
-              <h1 className="font-serif text-ink text-3xl md:text-5xl mb-8"> Analíticas Culinarias </h1>
-              <p className="text-slate-400 italic">Las métricas de rendimiento estarán disponibles próximamente.</p>
-            </div>
+            <AdminMetrics />
           ) : (
             <div className="max-w-6xl mx-auto px-2 md:px-0">
               <header className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -240,7 +258,7 @@ export default function App() {
                 onClick={() => setActiveTab('favorites')}
                 className={`transition-colors cursor-pointer hover:text-primary ${activeTab === 'favorites' ? 'text-primary' : ''}`}
               >
-                Favoritos
+                Mi Menú
               </li>
               <li 
                 onClick={() => setActiveTab('admin')}
@@ -309,7 +327,7 @@ export default function App() {
           onClick={() => setActiveTab('favorites')}
           className={`flex flex-col items-center space-y-1 transition-all ${activeTab === 'favorites' ? 'text-primary' : 'text-slate-400'}`}
         >
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Guardados</span>
+          <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Mi Menú</span>
         </button>
       </nav>
     </div>

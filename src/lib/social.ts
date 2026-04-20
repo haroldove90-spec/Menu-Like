@@ -28,6 +28,11 @@ export async function toggleLikePlatillo(platilloId: string) {
 
     if (existing) {
       await supabase.from('interacciones').delete().eq('id', existing.id);
+      
+      // Actualizar contador en platillos
+      const { data: dish } = await supabase.from('platillos').select('likes_count').eq('id', platilloId).single();
+      await supabase.from('platillos').update({ likes_count: Math.max(0, (dish?.likes_count || 0) - 1) }).eq('id', platilloId);
+      
       return { action: 'removed' };
     } else {
       await supabase.from('interacciones').insert({
@@ -35,6 +40,11 @@ export async function toggleLikePlatillo(platilloId: string) {
         user_session_id: sessionId,
         tipo: 'like'
       });
+
+      // Actualizar contador en platillos
+      const { data: dish } = await supabase.from('platillos').select('likes_count').eq('id', platilloId).single();
+      await supabase.from('platillos').update({ likes_count: (dish?.likes_count || 0) + 1 }).eq('id', platilloId);
+
       return { action: 'added' };
     }
   } catch (error) {
@@ -56,6 +66,11 @@ export async function toggleSavePlatillo(platilloId: string) {
 
     if (existing) {
       await supabase.from('interacciones').delete().eq('id', existing.id);
+
+      // Actualizar contador en platillos
+      const { data: dish } = await supabase.from('platillos').select('saves_count').eq('id', platilloId).single();
+      await supabase.from('platillos').update({ saves_count: Math.max(0, (dish?.saves_count || 0) - 1) }).eq('id', platilloId);
+
       return { action: 'removed' };
     } else {
       await supabase.from('interacciones').insert({
@@ -63,6 +78,11 @@ export async function toggleSavePlatillo(platilloId: string) {
         user_session_id: sessionId,
         tipo: 'save'
       });
+
+      // Actualizar contador en platillos
+      const { data: dish } = await supabase.from('platillos').select('saves_count').eq('id', platilloId).single();
+      await supabase.from('platillos').update({ saves_count: (dish?.saves_count || 0) + 1 }).eq('id', platilloId);
+
       return { action: 'added' };
     }
   } catch (error) {
