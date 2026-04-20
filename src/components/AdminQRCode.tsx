@@ -150,7 +150,7 @@ export default function AdminQRCode() {
           </div>
           
           <div className="space-y-2">
-            <h2 className="font-serif text-2xl font-bold text-ink">{restaurant?.nombre || 'Tu Restaurante'}</h2>
+            <h2 className="font-serif text-2xl font-bold text-ink italic">{restaurant?.nombre || 'Tu Restaurante'}</h2>
             <p className="text-slate-400 text-xs font-serif italic text-balance px-4">Escanea para descubrir nuestra carta digital y disfrutar de una experiencia gourmet única.</p>
           </div>
 

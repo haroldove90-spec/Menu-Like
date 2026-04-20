@@ -6,6 +6,7 @@ import AdminSettings from './components/AdminSettings';
 import AdminMetrics from './components/AdminMetrics';
 import AdminQRCode from './components/AdminQRCode';
 import AdminNav from './components/AdminNav';
+import AdminAuth from './components/AdminAuth';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 import { toggleLikePlatillo, toggleSavePlatillo } from './lib/social';
 import { AlertCircle, Menu as MenuIcon, X } from 'lucide-react';
@@ -13,6 +14,7 @@ import { AlertCircle, Menu as MenuIcon, X } from 'lucide-react';
 export default function App() {
   const [activeTab, setActiveTab] = useState<'feed' | 'favorites' | 'admin'>('feed');
   const [adminView, setAdminView] = useState('dashboard');
+  const [user, setUser] = useState<any>(null);
   const [editingDish, setEditingDish] = useState<Dish | null>(null);
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +27,22 @@ export default function App() {
     if (!localStorage.getItem('social_menu_session')) {
       localStorage.setItem('social_menu_session', crypto.randomUUID());
     }
+
+    // Auth listener
+    if (isSupabaseConfigured) {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        setUser(session?.user ?? null);
+      });
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setUser(session?.user ?? null);
+      });
+
+      return () => subscription.unsubscribe();
+    }
+  }, []);
+
+  useEffect(() => {
     fetchRestaurant();
     fetchCategories();
     if (isSupabaseConfigured) {
@@ -195,11 +213,28 @@ export default function App() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (isSupabaseConfigured) {
+      await supabase.auth.signOut();
+    }
     setActiveTab('feed');
   };
 
   if (activeTab === 'admin') {
+    if (!user) {
+      return (
+        <div className="min-h-screen bg-page-bg py-20">
+          <button 
+            onClick={() => setActiveTab('feed')}
+            className="fixed top-8 left-8 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors flex items-center space-x-2"
+          >
+            <span>← Volver al Menú</span>
+          </button>
+          <AdminAuth />
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-page-bg text-ink font-sans selection:bg-primary/20 flex">
         <AdminNav 
@@ -246,7 +281,7 @@ export default function App() {
                 </button>
               </header>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
                 {dishes.map((dish) => (
                   <DishCard 
                     key={dish.id} 

@@ -216,7 +216,7 @@ export default function AdminSettings() {
         {/* Gestión de Categorías */}
         <div className="bg-white p-5 md:p-12 border border-slate-200 shadow-xl rounded-[1.5rem] md:rounded-[2rem] space-y-8">
           <div>
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-ink mb-2">Gestión de Categorías</h2>
+            <h2 className="font-serif text-2xl md:text-3xl font-bold text-ink mb-2 italic">Gestión de Categorías</h2>
             <p className="text-slate-400 text-[10px] uppercase tracking-widest font-bold">Crea y organiza las secciones de tu menú</p>
           </div>
 
