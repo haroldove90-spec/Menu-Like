@@ -1,18 +1,25 @@
 import React, { useState, useRef } from 'react';
 import { supabase } from '../lib/supabase';
-import { Upload, Plus, X, Loader2 } from 'lucide-react';
+import { Upload, Plus, X, Loader2, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Dish } from './DishCard';
 
-export default function AdminDishForm() {
+interface AdminDishFormProps {
+  dishToEdit?: Dish | null;
+  onSuccess?: () => void;
+  onCancel?: () => void;
+}
+
+export default function AdminDishForm({ dishToEdit, onSuccess, onCancel }: AdminDishFormProps) {
   const [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(dishToEdit?.imagen_url || null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
-    nombre: '',
-    descripcion: '',
-    precio: '',
-    categoria: 'Entradas'
+    nombre: dishToEdit?.nombre || '',
+    descripcion: dishToEdit?.descripcion || '',
+    precio: dishToEdit?.precio.toString() || '',
+    categoria: dishToEdit?.categoria || 'Entradas'
   });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +43,7 @@ export default function AdminDishForm() {
         throw new Error('El precio debe ser un número positivo');
       }
 
-      let imageUrl = '';
+      let imageUrl = dishToEdit?.imagen_url || '';
       const file = fileInputRef.current?.files?.[0];
 
       if (file) {
@@ -57,27 +64,44 @@ export default function AdminDishForm() {
         imageUrl = publicUrl;
       }
 
-      // 3. Insertar en DB
-      const { error: insertError } = await supabase.from('platillos').insert({
+      // 3. Insertar o Actualizar en DB
+      const dishData = {
         nombre: formData.nombre,
         descripcion: formData.descripcion,
         precio: precioNum,
         imagen_url: imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=1000',
         categoria: formData.categoria,
-        restaurant_id: 'rest-1'
-      });
+        restaurant_id: dishToEdit?.restaurant_id || 'rest-1'
+      };
 
-      if (insertError) {
-        if (insertError.message.includes('row-level security')) {
-          throw new Error('Error de Seguridad (RLS): Ejecuta el script SQL de "Acceso Total" en Supabase.');
-        }
-        throw insertError;
+      let error;
+      if (dishToEdit) {
+        const { error: updateError } = await supabase
+          .from('platillos')
+          .update(dishData)
+          .eq('id', dishToEdit.id);
+        error = updateError;
+      } else {
+        const { error: insertError } = await supabase
+          .from('platillos')
+          .insert(dishData);
+        error = insertError;
       }
 
-      alert('¡Platillo publicado con éxito!');
+      if (error) {
+        if (error.message.includes('row-level security')) {
+          throw new Error('Error de Seguridad (RLS): Ejecuta el script SQL de "Acceso Total" en Supabase.');
+        }
+        throw error;
+      }
+
+      alert(dishToEdit ? '¡Platillo actualizado!' : '¡Platillo publicado!');
+      if (onSuccess) onSuccess();
       // Reset
-      setFormData({ nombre: '', descripcion: '', precio: '', categoria: 'Entradas' });
-      setPreview(null);
+      if (!dishToEdit) {
+        setFormData({ nombre: '', descripcion: '', precio: '', categoria: 'Entradas' });
+        setPreview(null);
+      }
     } catch (err: any) {
       alert(err.message || 'Error al publicar');
     } finally {
@@ -87,9 +111,23 @@ export default function AdminDishForm() {
 
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">
-      <header className="mb-12">
-        <h1 className="font-serif text-5xl font-bold text-ink mb-4">Nueva Creación</h1>
-        <p className="text-primary/60 uppercase tracking-[0.3em] text-[10px] font-bold">Publicar platillo en el menú digital</p>
+      <header className="mb-12 flex justify-between items-start">
+        <div>
+          <h1 className="font-serif text-5xl font-bold text-ink mb-4">
+            {dishToEdit ? 'Editar Obra' : 'Nueva Creación'}
+          </h1>
+          <p className="text-primary/60 uppercase tracking-[0.3em] text-[10px] font-bold">
+            {dishToEdit ? 'Modificar los detalles del platillo' : 'Publicar platillo en el menú digital'}
+          </p>
+        </div>
+        {onCancel && (
+          <button 
+            onClick={onCancel}
+            className="p-3 text-slate-400 hover:text-ink transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        )}
       </header>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white p-12 border border-slate-200 shadow-xl relative overflow-hidden rounded-3xl">
@@ -195,8 +233,8 @@ export default function AdminDishForm() {
               </>
             ) : (
               <>
-                <Plus className="w-4 h-4" />
-                <span>Publicar Platillo</span>
+                {dishToEdit ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                <span>{dishToEdit ? 'Guardar Cambios' : 'Publicar Platillo'}</span>
               </>
             )}
           </button>

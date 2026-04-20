@@ -1,5 +1,5 @@
 import React, { useOptimistic, useTransition } from 'react';
-import { Heart, Bookmark, Share2, MoreHorizontal, Edit3, EyeOff } from 'lucide-react';
+import { Heart, Bookmark, Share2, MoreHorizontal, Edit3, EyeOff, X } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export interface Dish {
@@ -9,6 +9,8 @@ export interface Dish {
   precio: number;
   imagen_url: string;
   restaurant_id: string;
+  categoria?: string;
+  disponible?: boolean;
   likes_count?: number;
   is_liked_by_me?: boolean;
   is_saved_by_me?: boolean;
@@ -20,8 +22,9 @@ export interface DishCardProps {
   onSave: (dishId: string) => Promise<void>;
   onShare: (dishId: string) => void;
   isAdmin?: boolean;
-  onEdit?: (dishId: string) => void;
-  onToggleVisibility?: (dishId: string) => void;
+  onEdit?: (dish: Dish) => void;
+  onToggleVisibility?: (dishId: string, current: boolean) => void;
+  onDelete?: (dishId: string) => void;
   key?: string;
 }
 
@@ -32,7 +35,8 @@ export default function DishCard({
   onShare, 
   isAdmin = false,
   onEdit,
-  onToggleVisibility
+  onToggleVisibility,
+  onDelete
 }: DishCardProps) {
   const [isPending, startTransition] = useTransition();
   
@@ -87,26 +91,41 @@ export default function DishCard({
         {isAdmin && (
           <div className="absolute top-8 right-8 flex space-x-3 z-10">
             <button 
-              onClick={() => onEdit?.(dish.id)}
+              onClick={() => onEdit?.(dish)}
+              title="Editar Platillo"
               className="p-3 bg-white/90 backdrop-blur-md border border-slate-200 rounded-full text-slate-600 hover:bg-primary hover:text-white transition-all shadow-lg"
             >
               <Edit3 className="w-4 h-4" />
             </button>
             <button 
-              onClick={() => onToggleVisibility?.(dish.id)}
-              className="p-3 bg-white/90 backdrop-blur-md border border-slate-200 rounded-full text-slate-600 hover:bg-red-500 hover:text-white transition-all shadow-lg"
+              onClick={() => onToggleVisibility?.(dish.id, !!dish.disponible)}
+              title={dish.disponible === false ? "Activar Platillo" : "Desactivar Platillo"}
+              className={`p-3 bg-white/90 backdrop-blur-md border border-slate-200 rounded-full transition-all shadow-lg ${dish.disponible === false ? 'bg-amber-500 text-white' : 'text-slate-600 hover:bg-amber-500 hover:text-white'}`}
             >
               <EyeOff className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={() => {
+                if (window.confirm('¿Estás seguro de eliminar este platillo?')) {
+                  onDelete?.(dish.id);
+                }
+              }}
+              title="Borrar Platillo"
+              className="p-3 bg-white/90 backdrop-blur-md border border-slate-200 rounded-full text-slate-600 hover:bg-red-500 hover:text-white transition-all shadow-lg"
+            >
+              <X className="w-4 h-4" />
             </button>
           </div>
         )}
 
-        {/* Floating Price Badge */}
-        <div className="absolute top-8 left-8 bg-white/90 backdrop-blur-md px-5 py-2.5 rounded-full border border-slate-100 shadow-lg">
-          <span className="text-ink text-sm font-bold tracking-tight">
-            ${dish.precio.toFixed(2)}
-          </span>
-        </div>
+          <div className="absolute top-8 left-8 bg-white/90 backdrop-blur-md px-5 py-2.5 rounded-full border border-slate-100 shadow-lg flex items-center space-x-2">
+            <span className="text-ink text-sm font-bold tracking-tight">
+              ${dish.precio.toFixed(2)}
+            </span>
+            {dish.disponible === false && (
+              <span className="bg-red-500 text-white text-[8px] uppercase px-2 py-0.5 rounded-full font-bold">Inactivo</span>
+            )}
+          </div>
 
         {/* Interaction Bar - Menulike Style */}
         <div className="absolute bottom-10 right-10 flex flex-col space-y-5 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0">
@@ -166,7 +185,7 @@ export default function DishCard({
               <span className="text-slate-400 text-[9px] uppercase tracking-[0.2em] mt-2 font-bold">Favoritos</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-ink text-2xl font-bold tracking-tight">Platillo Gourmet</span>
+              <span className="text-ink text-2xl font-bold tracking-tight">{dish.categoria || 'Gourmet'}</span>
               <span className="text-slate-400 text-[9px] uppercase tracking-[0.2em] mt-2 font-bold">Categoría</span>
             </div>
           </div>

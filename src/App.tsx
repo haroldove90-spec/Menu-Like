@@ -10,6 +10,7 @@ import { AlertCircle, Menu as MenuIcon, X } from 'lucide-react';
 export default function App() {
   const [activeTab, setActiveTab] = useState<'feed' | 'favorites' | 'admin'>('feed');
   const [adminView, setAdminView] = useState('dashboard');
+  const [editingDish, setEditingDish] = useState<Dish | null>(null);
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,13 +20,20 @@ export default function App() {
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [activeTab]);
 
   async function loadDishes() {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('platillos')
         .select('*');
+      
+      // Si no es la pestaña admin, solo mostrar platillos disponibles
+      if (activeTab !== 'admin') {
+        query = query.eq('disponible', true);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
       
       if (error) throw error;
       setDishes(data || []);
@@ -45,16 +53,42 @@ export default function App() {
   };
 
   const handleShare = (id: string) => {
-    alert(`Compartiendo platillo ${id}`);
+    alert(`Enlace copiado para platillo ${id}`);
   };
 
-  const handleEdit = (id: string) => {
-    alert(`Modo Edición para platillo: ${id}`);
-    setAdminView('new'); // Abrir el formulario (simulado)
+  const handleEdit = (dish: Dish) => {
+    setEditingDish(dish);
+    setAdminView('new'); 
   };
 
-  const handleToggleVisibility = (id: string) => {
-    alert(`Cambiando visibilidad de platillo: ${id}`);
+  const handleToggleVisibility = async (id: string, current: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('platillos')
+        .update({ disponible: !current })
+        .eq('id', id);
+      
+      if (error) throw error;
+      await loadDishes();
+    } catch (err) {
+      console.error(err);
+      alert('Error al cambiar visibilidad');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('platillos')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw error;
+      await loadDishes();
+    } catch (err) {
+      console.error(err);
+      alert('Error al eliminar platillo');
+    }
   };
 
   const handleLogout = () => {
@@ -72,7 +106,18 @@ export default function App() {
         
         <main className="flex-grow ml-24 md:ml-64 py-12 px-8 min-h-screen">
           {adminView === 'new' ? (
-            <AdminDishForm />
+            <AdminDishForm 
+              dishToEdit={editingDish} 
+              onSuccess={() => {
+                setEditingDish(null);
+                setAdminView('dashboard');
+                loadDishes();
+              }} 
+              onCancel={() => {
+                setEditingDish(null);
+                setAdminView('dashboard');
+              }}
+            />
           ) : adminView === 'metrics' ? (
             <div className="max-w-4xl mx-auto py-20 text-center">
               <h1 className="font-serif text-ink text-5xl mb-8"> Analíticas Culinarias </h1>
@@ -101,9 +146,10 @@ export default function App() {
                     isAdmin={true}
                     onLike={async () => {}}
                     onSave={async () => {}}
-                    onShare={() => {}}
+                    onShare={handleShare}
                     onEdit={handleEdit}
                     onToggleVisibility={handleToggleVisibility}
+                    onDelete={handleDelete}
                   />
                 ))}
               </div>

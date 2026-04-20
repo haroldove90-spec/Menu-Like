@@ -86,8 +86,10 @@ export async function getUserFavorites() {
   if (error) throw error;
   
   // Mapear para devolver solo los platillos con meta-información
-  return data.map(item => ({
-    ...item.platillos,
-    is_saved_by_me: true
-  }));
+  return data
+    .filter(item => item.platillos && item.platillos.disponible !== false)
+    .map(item => ({
+      ...item.platillos,
+      is_saved_by_me: true
+    }));
 }
