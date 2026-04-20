@@ -18,6 +18,10 @@ export default function App() {
   const [restaurant, setRestaurant] = useState<any>(null);
 
   useEffect(() => {
+    // Asegurar que exista una sesión para interacciones sociales desde el inicio
+    if (!localStorage.getItem('social_menu_session')) {
+      localStorage.setItem('social_menu_session', crypto.randomUUID());
+    }
     fetchRestaurant();
     if (isSupabaseConfigured) {
       loadDishes();

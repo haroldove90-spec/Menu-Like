@@ -52,10 +52,13 @@ export default function FavoritesView() {
               <DishCard
                 key={dish.id}
                 dish={dish}
-                onLike={async (id) => { await toggleLikePlatillo(id); }}
+                onLike={async (id) => { 
+                  await toggleLikePlatillo(id);
+                  loadFavorites();
+                }}
                 onSave={async (id) => { 
                   await toggleSavePlatillo(id); 
-                  // Remover de la vista si se des-guarda (es la vista de favoritos)
+                  // Remover de la vista localmente para un feedback instantáneo
                   setFavorites(prev => prev.filter(d => d.id !== id));
                 }}
                 onShare={handleShare}

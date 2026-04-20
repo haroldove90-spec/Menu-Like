@@ -170,18 +170,18 @@ export default function DishCard({
           </p>
         </div>
 
-        <div className="mt-3 pt-2 border-t border-slate-50 flex items-center justify-between">
-          <div className="flex items-center space-x-1">
-            <Heart className={`w-3 h-3 ${optimisticLike.isLiked ? 'text-red-500 fill-red-500' : 'text-slate-300'}`} />
-            <span className="text-ink text-[9px] font-bold">{optimisticLike.count}</span>
+        <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
+          <div className="flex items-center space-x-1.5 py-0.5 rounded-md">
+            <Heart className={`w-3.5 h-3.5 ${optimisticLike.isLiked ? 'text-red-500 fill-red-500' : 'text-slate-400'}`} />
+            <span className={`text-[11px] font-bold ${optimisticLike.isLiked ? 'text-red-500' : 'text-slate-700'}`}>{optimisticLike.count}</span>
           </div>
-          <div className="flex items-center space-x-1">
-            <Bookmark className={`w-3 h-3 ${optimisticSave ? 'text-primary fill-primary' : 'text-slate-300'}`} />
-            <span className="text-ink text-[9px] font-bold">{dish.saves_count || 0}</span>
+          <div className="flex items-center space-x-1.5 py-0.5 rounded-md">
+            <Bookmark className={`w-3.5 h-3.5 ${optimisticSave ? 'text-primary fill-primary' : 'text-slate-400'}`} />
+            <span className={`text-[11px] font-bold ${optimisticSave ? 'text-primary' : 'text-slate-700'}`}>{dish.saves_count || 0}</span>
           </div>
-          <div className="flex items-center space-x-1">
-            <Share2 className="w-3 h-3 text-slate-300" />
-            <span className="text-ink text-[9px] font-bold">{dish.shares_count || 0}</span>
+          <div className="flex items-center space-x-1.5 py-0.5 rounded-md">
+            <Share2 className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-slate-700 text-[11px] font-bold">{dish.shares_count || 0}</span>
           </div>
         </div>
       </div>
