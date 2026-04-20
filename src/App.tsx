@@ -36,6 +36,9 @@ export default function App() {
   }
 
   async function loadDishes() {
+    // Solo mostrar el spinner si no hay platos previos para evitar parpadeos molestos
+    if (dishes.length === 0) setLoading(true);
+    
     try {
       const sessionId = localStorage.getItem('social_menu_session');
       
@@ -76,7 +79,8 @@ export default function App() {
         setDishes(rawDishes);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error cargando platillos:", err);
+      // No vaciamos la lista si hay un error para mantener lo que había
     } finally {
       setLoading(false);
     }
