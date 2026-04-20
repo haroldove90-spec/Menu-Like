@@ -64,10 +64,15 @@ export default function AdminDishForm() {
         precio: precioNum,
         imagen_url: imageUrl || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=1000',
         categoria: formData.categoria,
-        restaurant_id: 'rest-1' // ID de ejemplo
+        restaurant_id: 'rest-1'
       });
 
-      if (insertError) throw insertError;
+      if (insertError) {
+        if (insertError.message.includes('row-level security')) {
+          throw new Error('Error de Seguridad (RLS): Ejecuta el script SQL de "Acceso Total" en Supabase.');
+        }
+        throw insertError;
+      }
 
       alert('¡Platillo publicado con éxito!');
       // Reset
