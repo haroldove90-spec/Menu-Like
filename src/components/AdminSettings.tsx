@@ -214,12 +214,20 @@ export default function AdminSettings() {
               />
               <div className="flex-grow space-y-2">
                 <p className="text-sm text-slate-500 italic font-serif">Ajusta el color de fondo para la barra de navegación lateral e inferior.</p>
-                <div className="flex gap-2">
-                  {['#0F172A', '#E63946', '#1E293B', '#10B981', '#3B82F6', '#8B5CF6'].map(color => (
+                <div className="grid grid-cols-6 sm:grid-cols-10 gap-2">
+                  {[
+                    '#0F172A', '#1E293B', '#334155', // Oscuros/Elegantes
+                    '#E63946', '#EF4444', '#991B1B', // Rojos/Carnes
+                    '#059669', '#10B981', '#064E3B', // Verdes/Saludables
+                    '#D4AF37', '#B45309', '#78350F', // Dorados/Café
+                    '#2563EB', '#3B82F6', '#1E3A8A', // Azules / Cool
+                    '#7C3AED', '#8B5CF6', '#4C1D95', // Purpura / Creativo
+                    '#EC4899', '#DB2777'             // Rosas / Dulces
+                  ].map(color => (
                     <button 
                       key={color}
                       onClick={() => setNavBgColor(color)}
-                      className="w-6 h-6 rounded-full border border-slate-200"
+                      className={`w-7 h-7 rounded-full border-2 transition-transform hover:scale-125 ${navBgColor === color ? 'border-primary ring-2 ring-primary/20' : 'border-white/20'}`}
                       style={{ backgroundColor: color }}
                     />
                   ))}
