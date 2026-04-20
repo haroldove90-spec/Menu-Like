@@ -37,17 +37,17 @@ export default function FavoritesView() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
-      <header className="mb-16 text-center">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary mb-6">
-          <Star className="w-6 h-6 fill-current" />
+      <header className="mb-12 text-center">
+        <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary mb-4">
+          <Star className="w-5 h-5 fill-current" />
         </div>
-        <h1 className="font-serif text-5xl md:text-7xl font-bold text-ink mb-4">Mi Menú</h1>
-        <p className="text-slate-400 font-light tracking-[0.2em] uppercase text-[10px]">Tu selección culinaria personal</p>
+        <h1 className="font-serif text-4xl md:text-5xl font-bold text-ink mb-2">Mi Menú</h1>
+        <p className="text-slate-400 font-light tracking-[0.3em] uppercase text-[8px]">Personal</p>
       </header>
 
       <AnimatePresence mode="popLayout">
         {favorites.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-8 max-w-[1400px] mx-auto">
             {favorites.map((dish) => (
               <DishCard
                 key={dish.id}

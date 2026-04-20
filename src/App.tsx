@@ -42,33 +42,45 @@ export default function App() {
     try {
       const sessionId = localStorage.getItem('social_menu_session');
       
-      let query = supabase
-        .from('platillos')
-        .select('*');
+      // Consulta base
+      let query = supabase.from('platillos').select('*');
       
-      let rawDishes: any[] = [];
-
-      // Si no es la pestaña admin, solo mostrar platillos disponibles
+      // Aplicar filtros de forma segura
       if (activeTab !== 'admin') {
-        const { data, error } = await query
-          .or('disponible.eq.true,disponible.is.null')
-          .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        rawDishes = data || [];
-      } else {
-        const { data, error } = await query.order('created_at', { ascending: false });
-        if (error) throw error;
-        rawDishes = data || [];
+        // En lugar de un .or complejo que puede fallar si la columna no existe 
+        // o si Supabase tiene problemas con esa sintaxis, traemos y filtramos localmente
+        // o usamos un filtro más simple.
+        query = query.filter('disponible', 'neq', false);
       }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error("Error de Supabase:", error);
+        // Si hay error (ej: columna no existe), intentamos traer todo sin filtros
+        const { data: fallbackData } = await supabase.from('platillos').select('*').order('created_at', { ascending: false });
+        if (fallbackData) {
+          setDishes(fallbackData);
+          return;
+        }
+        throw error;
+      }
+
+      const rawDishes = data || [];
 
       // Enriquecer con estados de interacción si hay sesión
       if (sessionId && rawDishes.length > 0) {
-        const { data: interactions } = await supabase
+        const { data: interactions, error: intError } = await supabase
           .from('interacciones')
           .select('platillo_id, tipo')
           .eq('user_session_id', sessionId);
         
+        if (intError) {
+          console.warn("Error cargando interacciones:", intError);
+          setDishes(rawDishes);
+          return;
+        }
+
         const enriched = rawDishes.map(dish => ({
           ...dish,
           is_liked_by_me: interactions?.some(i => i.platillo_id === dish.id && i.tipo === 'like'),
@@ -79,8 +91,7 @@ export default function App() {
         setDishes(rawDishes);
       }
     } catch (err) {
-      console.error("Error cargando platillos:", err);
-      // No vaciamos la lista si hay un error para mantener lo que había
+      console.error("Error crítico cargando platillos:", err);
     } finally {
       setLoading(false);
     }
@@ -98,23 +109,37 @@ export default function App() {
 
   const handleShare = async (id: string) => {
     try {
-      // Intentamos copiar al portapapeles
-      await navigator.clipboard.writeText(`${window.location.origin}/dish/${id}`);
+      const shareUrl = `${window.location.origin}/dish/${id}`;
+      const dish = dishes.find(d => d.id === id);
+      const text = `¡Mira este platillo delicioso: ${dish?.nombre}!`;
+
+      // Intentar Web Share API si está disponible (mejor para móviles)
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Gourmet Share',
+          text: text,
+          url: shareUrl,
+        });
+      } else {
+        // Fallback a WhatsApp y Clipboard
+        const waUrl = `https://wa.me/?text=${encodeURIComponent(text + " " + shareUrl)}`;
+        window.open(waUrl, '_blank');
+        await navigator.clipboard.writeText(shareUrl);
+        alert('¡Enlace copiado al portapapeles y preparando WhatsApp!');
+      }
       
       // Incrementar contador de compartidos en DB
-      const { data: dish } = await supabase.from('platillos').select('shares_count').eq('id', id).single();
-      const currentShares = dish?.shares_count || 0;
+      const { data: dishData } = await supabase.from('platillos').select('shares_count').eq('id', id).single();
+      const currentShares = dishData?.shares_count || 0;
       
       await supabase
         .from('platillos')
         .update({ shares_count: currentShares + 1 })
         .eq('id', id);
 
-      alert(`¡Enlace copiado! Se ha compartido este platillo.`);
       loadDishes();
     } catch (err) {
       console.error(err);
-      alert('Error al compartir');
     }
   };
 
@@ -251,7 +276,7 @@ export default function App() {
             />
           </div>
           <nav>
-            <ul className="flex space-x-8 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
+            <ul className="flex space-x-6 text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500">
               <li 
                 onClick={() => setActiveTab('feed')}
                 className={`transition-colors cursor-pointer hover:text-primary ${activeTab === 'feed' ? 'text-primary' : ''}`}
@@ -297,7 +322,7 @@ export default function App() {
                 <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+              <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-8 max-w-[1400px] mx-auto">
                 {dishes.length > 0 ? dishes.map((dish) => (
                   <DishCard 
                     key={dish.id} 
@@ -307,8 +332,16 @@ export default function App() {
                     onShare={handleShare}
                   />
                 )) : (
-                  <div className="text-center py-20 text-slate-400 font-serif italic text-xl">
-                    No se encontraron platillos en la base de datos.
+                  <div className="text-center py-20 px-6 bg-white rounded-[2rem] border border-dashed border-slate-200 w-full col-span-full">
+                    <p className="text-slate-400 font-serif italic text-xl mb-6">
+                      No se encontraron platillos disponibles.
+                    </p>
+                    <button 
+                      onClick={() => loadDishes()}
+                      className="px-8 py-3 bg-slate-900 text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all"
+                    >
+                      Intentar Recargar
+                    </button>
                   </div>
                 )}
               </div>
