@@ -466,9 +466,9 @@ export default function App() {
       {/* Navigation Bar */}
       <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
         <nav 
-          className="h-16 md:h-18 px-6 rounded-full border border-white/10 flex items-center justify-around w-full max-w-lg shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500 backdrop-blur-xl pointer-events-auto"
+          className="h-16 md:h-18 px-6 rounded-full border border-white/20 flex items-center justify-around w-full max-w-lg shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 backdrop-blur-2xl pointer-events-auto"
           style={{ 
-            backgroundColor: restaurant?.nav_bg_color ? `${restaurant.nav_bg_color}cc` : 'rgba(15, 23, 42, 0.9)',
+            backgroundColor: restaurant?.nav_bg_color ? `${restaurant.nav_bg_color}E6` : 'rgba(15, 23, 42, 0.95)',
             color: restaurant?.nav_text_color || '#FFFFFF'
           }}
         >
@@ -479,13 +479,13 @@ export default function App() {
             {activeTab === 'feed' && (
               <motion.div 
                 layoutId="bubble"
-                className="absolute inset-x-0 inset-y-2 rounded-full -z-10"
-                style={{ backgroundColor: restaurant?.nav_text_color ? `${restaurant.nav_text_color}15` : 'rgba(255,255,255,0.1)' }}
+                className="absolute inset-x-0 inset-y-2 rounded-full -z-10 shadow-lg border border-white/10"
+                style={{ backgroundColor: restaurant?.nav_text_color ? `${restaurant.nav_text_color}33` : 'rgba(255,255,255,0.2)' }}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
             )}
-            <Home className={`w-5 h-5 mb-0.5 transition-all duration-300 ${activeTab === 'feed' ? 'scale-110 text-white' : 'opacity-50 group-hover:opacity-100'}`} />
-            <span className={`text-[7px] font-bold uppercase tracking-[0.2em] transition-opacity duration-300 ${activeTab === 'feed' ? 'opacity-100' : 'opacity-50 group-hover:opacity-100'}`}>
+            <Home className={`w-5 h-5 mb-0.5 transition-all duration-300 ${activeTab === 'feed' ? 'scale-110 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]' : 'opacity-40 group-hover:opacity-100'}`} />
+            <span className={`text-[8px] font-bold uppercase tracking-[0.2em] transition-opacity duration-300 ${activeTab === 'feed' ? 'opacity-100' : 'opacity-40 group-hover:opacity-100'}`}>
               Cerca de ti
             </span>
           </button>
@@ -497,13 +497,13 @@ export default function App() {
             {activeTab === 'favorites' && (
               <motion.div 
                 layoutId="bubble"
-                className="absolute inset-x-0 inset-y-2 rounded-full -z-10"
-                style={{ backgroundColor: restaurant?.nav_text_color ? `${restaurant.nav_text_color}15` : 'rgba(255,255,255,0.1)' }}
+                className="absolute inset-x-0 inset-y-2 rounded-full -z-10 shadow-lg border border-white/10"
+                style={{ backgroundColor: restaurant?.nav_text_color ? `${restaurant.nav_text_color}33` : 'rgba(255,255,255,0.2)' }}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
             )}
-            <Star className={`w-5 h-5 mb-0.5 transition-all duration-300 ${activeTab === 'favorites' ? 'scale-110 text-white' : 'opacity-50 group-hover:opacity-100'}`} />
-            <span className={`text-[7px] font-bold uppercase tracking-[0.2em] transition-opacity duration-300 ${activeTab === 'favorites' ? 'opacity-100' : 'opacity-50 group-hover:opacity-100'}`}>
+            <Star className={`w-5 h-5 mb-0.5 transition-all duration-300 ${activeTab === 'favorites' ? 'scale-110 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]' : 'opacity-40 group-hover:opacity-100'}`} />
+            <span className={`text-[8px] font-bold uppercase tracking-[0.2em] transition-opacity duration-300 ${activeTab === 'favorites' ? 'opacity-100' : 'opacity-40 group-hover:opacity-100'}`}>
               Mi Menú
             </span>
           </button>
