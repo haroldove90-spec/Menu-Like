@@ -8,7 +8,8 @@ export default function AdminSettings() {
   const [saving, setSaving] = useState(false);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [restName, setRestName] = useState('Menú Like');
-  const [navBgColor, setNavBgColor] = useState('#0F172A'); // Default dark
+  const [navBgColor, setNavBgColor] = useState('#0F172A');
+  const [navTextColor, setNavTextColor] = useState('#FFFFFF');
   const [categories, setCategories] = useState<{id: string, nombre: string}[]>([]);
   const [newCategory, setNewCategory] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -31,6 +32,7 @@ export default function AdminSettings() {
         setLogoUrl(data.logo_url);
         setRestName(data.nombre);
         if (data.nav_bg_color) setNavBgColor(data.nav_bg_color);
+        if (data.nav_text_color) setNavTextColor(data.nav_text_color);
       }
     } catch (err) {
       console.error('Error fetching settings:', err);
@@ -123,13 +125,14 @@ export default function AdminSettings() {
           id: 'rest-1',
           nombre: restName,
           logo_url: logoUrl,
-          nav_bg_color: navBgColor
+          nav_bg_color: navBgColor,
+          nav_text_color: navTextColor
         });
 
       if (error) {
-        // Si el error es por la columna faltante, intentamos guardar sin el color para no bloquear al usuario
-        if (error.message?.includes('nav_bg_color')) {
-          console.warn("Columna nav_bg_color pendiente en Supabase. Guardando básicos...");
+        // Manejo de error si faltan las columnas
+        if (error.message?.includes('nav_bg_color') || error.message?.includes('nav_text_color')) {
+          console.warn("Columnas de personalización pendientes en Supabase...");
           const { error: retryError } = await supabase
             .from('restaurantes')
             .upsert({
@@ -140,7 +143,7 @@ export default function AdminSettings() {
           
           if (retryError) throw retryError;
           
-          alert('¡Guardado parcial! Para activar el cambio de COLOR, debes ejecutar este código en el SQL Editor de Supabase:\n\nALTER TABLE restaurantes ADD COLUMN IF NOT EXISTS nav_bg_color TEXT DEFAULT \'#0F172A\';');
+          alert('¡Guardado parcial! Para activar el cambio de COLOR DE TEXTO, ejecuta el SQL corregido en Supabase.');
           return;
         }
         throw error;
@@ -247,6 +250,32 @@ export default function AdminSettings() {
                       key={color}
                       onClick={() => setNavBgColor(color)}
                       className={`w-7 h-7 rounded-full border-2 transition-transform hover:scale-125 ${navBgColor === color ? 'border-primary ring-2 ring-primary/20' : 'border-white/20'}`}
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Text Color Section */}
+          <div className="space-y-6 pt-4 border-t border-slate-100">
+            <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Color del Texto e Iconos</label>
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <input 
+                type="color"
+                className="w-20 h-20 rounded-2xl cursor-pointer border-4 border-slate-50 shadow-sm"
+                value={navTextColor}
+                onChange={(e) => setNavTextColor(e.target.value)}
+              />
+              <div className="flex-grow space-y-2">
+                <p className="text-sm text-slate-500 italic font-serif">Elige un color que contraste bien con el fondo del menú.</p>
+                <div className="flex gap-2">
+                  {['#FFFFFF', '#000000', '#F8FAFC', '#E2E8F0', '#94A3B8', '#FDE047'].map(color => (
+                    <button 
+                      key={color}
+                      onClick={() => setNavTextColor(color)}
+                      className={`w-6 h-6 rounded-full border ${navTextColor === color ? 'ring-2 ring-primary ring-offset-2' : 'border-slate-200'}`}
                       style={{ backgroundColor: color }}
                     />
                   ))}

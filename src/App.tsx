@@ -59,10 +59,9 @@ export default function App() {
       const { data } = await supabase.from('restaurantes').select('*').eq('id', 'rest-1').single();
       if (data) {
         setRestaurant(data);
-        // Persistir color en el root para acceso fácil por CSS o props
-        if (data.nav_bg_color) {
-          document.documentElement.style.setProperty('--nav-bg-custom', data.nav_bg_color);
-        }
+        // Persistir colores en el root
+        if (data.nav_bg_color) document.documentElement.style.setProperty('--nav-bg-custom', data.nav_bg_color);
+        if (data.nav_text_color) document.documentElement.style.setProperty('--nav-text-custom', data.nav_text_color);
       }
     } catch (err) {
       console.error(err);
@@ -252,6 +251,7 @@ export default function App() {
           onViewChange={setAdminView} 
           onLogout={handleLogout} 
           customBgColor={restaurant?.nav_bg_color}
+          customTextColor={restaurant?.nav_text_color}
         />
         
         <main className="flex-grow md:ml-64 pb-32 md:pb-12 pt-8 md:pt-12 px-2 md:px-8 min-h-screen w-full overflow-x-hidden">
@@ -466,7 +466,10 @@ export default function App() {
       {/* Navigation Bar */}
       <nav 
         className="fixed bottom-0 left-0 right-0 h-20 bg-ink border-t border-white/5 flex items-center justify-around z-50 px-6 pb-2 shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.3)] transition-colors duration-500"
-        style={restaurant?.nav_bg_color ? { backgroundColor: restaurant.nav_bg_color } : {}}
+        style={{ 
+          backgroundColor: restaurant?.nav_bg_color || '#0F172A',
+          color: restaurant?.nav_text_color || '#FFFFFF'
+        }}
       >
         <button 
           onClick={() => setActiveTab('feed')}
@@ -475,12 +478,13 @@ export default function App() {
           {activeTab === 'feed' && (
             <motion.div 
               layoutId="bubble"
-              className="absolute inset-x-0 inset-y-2 bg-white/10 rounded-2xl -z-10"
+              className="absolute inset-x-0 inset-y-2 rounded-2xl -z-10"
+              style={{ backgroundColor: restaurant?.nav_text_color ? `${restaurant.nav_text_color}15` : 'rgba(255,255,255,0.1)' }}
               transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
             />
           )}
-          <Home className={`w-5 h-5 mb-1 transition-all duration-300 ${activeTab === 'feed' ? 'text-primary scale-110' : 'text-slate-500 group-hover:text-slate-300'}`} />
-          <span className={`text-[8px] font-bold uppercase tracking-[0.2em] transition-colors duration-300 ${activeTab === 'feed' ? 'text-white' : 'text-slate-500 group-hover:text-slate-300'}`}>
+          <Home className={`w-5 h-5 mb-1 transition-all duration-300 ${activeTab === 'feed' ? 'scale-110' : 'opacity-60 group-hover:opacity-100'}`} style={{ color: activeTab === 'feed' ? '#E63946' : 'inherit' }} />
+          <span className={`text-[8px] font-bold uppercase tracking-[0.2em] transition-opacity duration-300 ${activeTab === 'feed' ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
             Cerca de ti
           </span>
         </button>
@@ -492,12 +496,13 @@ export default function App() {
           {activeTab === 'favorites' && (
             <motion.div 
               layoutId="bubble"
-              className="absolute inset-x-0 inset-y-2 bg-white/10 rounded-2xl -z-10"
+              className="absolute inset-x-0 inset-y-2 rounded-2xl -z-10"
+              style={{ backgroundColor: restaurant?.nav_text_color ? `${restaurant.nav_text_color}15` : 'rgba(255,255,255,0.1)' }}
               transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
             />
           )}
-          <Star className={`w-5 h-5 mb-1 transition-all duration-300 ${activeTab === 'favorites' ? 'text-primary scale-110' : 'text-slate-500 group-hover:text-slate-300'}`} />
-          <span className={`text-[8px] font-bold uppercase tracking-[0.2em] transition-colors duration-300 ${activeTab === 'favorites' ? 'text-white' : 'text-slate-500 group-hover:text-slate-300'}`}>
+          <Star className={`w-5 h-5 mb-1 transition-all duration-300 ${activeTab === 'favorites' ? 'scale-110' : 'opacity-60 group-hover:opacity-100'}`} style={{ color: activeTab === 'favorites' ? '#E63946' : 'inherit' }} />
+          <span className={`text-[8px] font-bold uppercase tracking-[0.2em] transition-opacity duration-300 ${activeTab === 'favorites' ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
             Mi Menú
           </span>
         </button>
