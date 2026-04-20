@@ -46,36 +46,36 @@ export default function AdminMetrics() {
   return (
     <div className="max-w-6xl mx-auto py-8 md:py-12 px-2 md:px-6 overflow-x-hidden">
       <header className="mb-8 md:mb-12 px-2">
-        <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-4 italic">Métricas de Rendimiento</h1>
+        <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-2 italic break-words leading-tight">Métricas de Rendimiento</h1>
         <p className="text-primary/60 uppercase tracking-[0.3em] text-[8px] md:text-[10px] font-bold">Analiza el impacto de tu carta gourmet</p>
       </header>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8 mb-10 md:mb-16">
-        <div className="bg-white p-4 md:p-8 border border-slate-100 rounded-2xl md:rounded-3xl shadow-sm flex flex-col md:flex-row md:items-center md:space-x-6 space-y-3 md:space-y-0 min-w-0">
-          <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-red-50 text-red-500 flex items-center justify-center flex-shrink-0">
-            <Heart className="w-5 h-5 md:w-7 md:h-7 fill-current" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-10 md:mb-16">
+        <div className="bg-white p-6 md:p-8 border border-slate-100 rounded-2xl md:rounded-3xl shadow-sm flex items-center space-x-6 min-w-0">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-red-50 text-red-500 flex items-center justify-center flex-shrink-0">
+            <Heart className="w-6 h-6 md:w-7 md:h-7 fill-current" />
           </div>
           <div className="min-w-0">
-            <span className="text-slate-400 text-[8px] md:text-[10px] uppercase font-bold tracking-widest block mb-1 truncate">Total Likes</span>
-            <span className="text-xl md:text-3xl font-bold text-ink">{totalLikes}</span>
+            <span className="text-slate-400 text-[10px] md:text-[10px] uppercase font-bold tracking-widest block mb-1 truncate">Total Likes</span>
+            <span className="text-2xl md:text-3xl font-bold text-ink">{totalLikes}</span>
           </div>
         </div>
-        <div className="bg-white p-4 md:p-8 border border-slate-100 rounded-2xl md:rounded-3xl shadow-sm flex flex-col md:flex-row md:items-center md:space-x-6 space-y-3 md:space-y-0 min-w-0">
-          <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center flex-shrink-0">
-            <Bookmark className="w-5 h-5 md:w-7 md:h-7 fill-current" />
+        <div className="bg-white p-6 md:p-8 border border-slate-100 rounded-2xl md:rounded-3xl shadow-sm flex items-center space-x-6 min-w-0">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center flex-shrink-0">
+            <Bookmark className="w-6 h-6 md:w-7 md:h-7 fill-current" />
           </div>
           <div className="min-w-0">
-            <span className="text-slate-400 text-[8px] md:text-[10px] uppercase font-bold tracking-widest block mb-1 truncate">Guardados</span>
-            <span className="text-xl md:text-3xl font-bold text-ink">{totalSaves}</span>
+            <span className="text-slate-400 text-[10px] md:text-[10px] uppercase font-bold tracking-widest block mb-1 truncate">Guardados</span>
+            <span className="text-2xl md:text-3xl font-bold text-ink">{totalSaves}</span>
           </div>
         </div>
-        <div className="bg-white p-4 md:p-8 border border-slate-100 rounded-2xl md:rounded-3xl shadow-sm flex flex-col md:flex-row md:items-center md:space-x-6 space-y-3 md:space-y-0 col-span-2 lg:col-span-1 min-w-0">
-          <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center flex-shrink-0">
-            <Share2 className="w-5 h-5 md:w-7 md:h-7" />
+        <div className="bg-white p-6 md:p-8 border border-slate-100 rounded-2xl md:rounded-3xl shadow-sm flex items-center space-x-6 sm:col-span-2 lg:col-span-1 min-w-0">
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center flex-shrink-0">
+            <Share2 className="w-6 h-6 md:w-7 md:h-7" />
           </div>
           <div className="min-w-0">
-            <span className="text-slate-400 text-[8px] md:text-[10px] uppercase font-bold tracking-widest block mb-1 truncate">Compartidos</span>
+            <span className="text-slate-400 text-[10px] md:text-[10px] uppercase font-bold tracking-widest block mb-1 truncate">Compartidos</span>
             <span className="text-xl md:text-3xl font-bold text-ink">{totalShares}</span>
           </div>
         </div>

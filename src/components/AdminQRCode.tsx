@@ -29,15 +29,38 @@ export default function AdminQRCode() {
     if (!canvas) return;
     
     try {
+      // Intentar crear un canvas temporal con fondo blanco para asegurar calidad
+      const tempCanvas = document.createElement('canvas');
+      const ctx = tempCanvas.getContext('2d');
+      if (!ctx) throw new Error('No se pudo obtener el contexto del canvas');
+
+      tempCanvas.width = canvas.width + 40;
+      tempCanvas.height = canvas.height + 40;
+      
+      // Fondo blanco
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+      
+      // Dibujar QR original en el centro
+      ctx.drawImage(canvas, 20, 20);
+
       const link = document.createElement('a');
       link.download = `QR-${restaurant?.nombre || 'Menu'}.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.href = tempCanvas.toDataURL('image/png');
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (err) {
       console.error('Error downloading QR:', err);
-      alert('Error al descargar la imagen. Intenta guardarla manualmente.');
+      // Fallback simple si falla el canvas decorado
+      try {
+        const link = document.createElement('a');
+        link.download = `QR-${restaurant?.nombre || 'Menu'}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (innerErr) {
+        alert('Error al descargar la imagen. Asegúrate de que el navegador permita descargas.');
+      }
     }
   };
 
@@ -52,28 +75,36 @@ export default function AdminQRCode() {
     try {
       canvas.toBlob(async (blob) => {
         if (!blob) return;
-        const file = new File([blob], 'menu-restaurante-qr.png', { type: 'image/png' });
+        const file = new File([blob], 'codigo-qr-menu.png', { type: 'image/png' });
         
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        // Verificar soporte básico de compartir archivos
+        const canShare = navigator.canShare && navigator.canShare({ files: [file] });
+
+        if (navigator.share && canShare) {
           await navigator.share({
-            title: `Menú de ${restaurant?.nombre}`,
-            text: 'Descubre nuestra propuesta gastronómica escaneando este código.',
+            title: `Menú de ${restaurant?.nombre || 'Restaurante'}`,
+            text: 'Descubre nuestra carta digital escaneando este código QR.',
             files: [file],
           });
+        } else if (navigator.share) {
+          // Si puede compartir texto pero no archivos
+          await navigator.share({
+            title: `Menú de ${restaurant?.nombre || 'Restaurante'}`,
+            text: `Consulta nuestro menú digital aquí: ${menuUrl}`,
+          });
         } else {
-          // Fallback: Copy URL
+          // Copiar al portapapeles como último recurso
           await navigator.clipboard.writeText(menuUrl);
-          alert('Copiado: El enlace de tu menú se ha copiado al portapapeles (Tu navegador no permite compartir archivos directamente).');
+          alert('Enlace copiado al portapapeles. (Tu navegador no admite compartir imágenes directamente)');
         }
       });
     } catch (err) {
       console.error('Error sharing:', err);
-      // Final Fallback
       try {
         await navigator.clipboard.writeText(menuUrl);
         alert('Enlace copiado al portapapeles.');
-      } catch (copyErr) {
-        alert('No se pudo compartir ni copiar el enlace.');
+      } catch (e) {
+        alert('No se pudo compartir el código');
       }
     }
   };
@@ -90,9 +121,9 @@ export default function AdminQRCode() {
   const menuUrl = window.location.origin;
 
   return (
-    <div className="max-w-4xl mx-auto py-8 md:py-12 px-2 md:px-6">
+    <div className="max-w-4xl mx-auto py-8 md:py-12 px-2 md:px-6 overflow-x-hidden">
       <header className="mb-8 md:mb-12 px-2">
-        <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-4 italic">Código QR del Menú</h1>
+        <h1 className="font-serif text-3xl md:text-5xl font-bold text-ink mb-2 italic break-words leading-tight">Código QR del Menú</h1>
         <p className="text-primary/60 uppercase tracking-[0.3em] text-[8px] md:text-[10px] font-bold">Genera el acceso directo para tus clientes</p>
       </header>
 
@@ -113,6 +144,7 @@ export default function AdminQRCode() {
                 height: 60,
                 width: 60,
                 excavate: true,
+                crossOrigin: 'anonymous'
               } : undefined}
             />
           </div>

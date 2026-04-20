@@ -208,7 +208,7 @@ export default function App() {
           onLogout={handleLogout} 
         />
         
-        <main className="flex-grow md:ml-64 pb-32 md:pb-12 pt-8 md:pt-12 px-4 md:px-8 min-h-screen">
+        <main className="flex-grow md:ml-64 pb-32 md:pb-12 pt-8 md:pt-12 px-2 md:px-8 min-h-screen w-full overflow-x-hidden">
           {adminView === 'new' ? (
             <AdminDishForm 
               dishToEdit={editingDish} 
